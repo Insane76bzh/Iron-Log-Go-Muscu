@@ -8,345 +8,285 @@
 <title>IRON LOG</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0b;
-    --surface: #111113;
-    --surface2: #1a1a1e;
-    --surface3: #222228;
-    --border: #2a2a32;
-    --accent: #e8ff47;
-    --accent2: #ff6b35;
-    --text: #f0f0f2;
-    --text2: #8888a0;
-    --text3: #555566;
-    --danger: #ff4757;
-    --success: #2ed573;
-    --uni-l: #5b8fff;
-    --uni-r: #ff6b6b;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
+:root {
+  --bg: #0a0a0b;
+  --surface: #111113;
+  --surface2: #1a1a1e;
+  --surface3: #222228;
+  --border: #2a2a32;
+  --accent: #e8ff47;
+  --accent2: #ff6b35;
+  --text: #f0f0f2;
+  --text2: #8888a0;
+  --text3: #555566;
+  --danger: #ff4757;
+  --success: #2ed573;
+  --uni-l: #5b8fff;
+  --uni-r: #ff6b6b;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh; overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/* HEADER */
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: 14px 20px 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.app-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--accent); line-height: 1; }
+.app-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); letter-spacing: 1px; }
+.header-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+/* SYNC STATUS */
+.sync-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text3); transition: all .3s;
+}
+.sync-badge.saving { color: var(--accent2); border-color: var(--accent2); }
+.sync-badge.saved { color: var(--success); border-color: var(--success); }
+.sync-badge.error { color: var(--danger); border-color: var(--danger); }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.sync-badge.saving .sync-dot { animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-  /* ── HEADER ── */
-  .app-header {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px 12px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .app-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--accent); line-height: 1; }
-  .app-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
-  .header-right { margin-left: auto; display: flex; gap: 8px; }
-  .icon-btn {
-    width: 38px; height: 38px; border-radius: var(--radius-sm);
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text2); font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .15s;
-  }
-  .icon-btn:active { background: var(--surface3); transform: scale(.95); }
-  .icon-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+/* VIEWS */
+.view { display: none; padding: 16px 20px; max-width: 520px; margin: 0 auto; }
+.view.active { display: block; }
 
-  /* ── VIEWS ── */
-  .view { display: none; padding: 16px 20px; max-width: 520px; margin: 0 auto; }
-  .view.active { display: block; }
+/* HOME */
+.home-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: 1px; margin-bottom: 20px; }
+.session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.session-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 14px;
+  cursor: pointer; transition: all .15s; position: relative; overflow: hidden;
+}
+.session-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .2s;
+}
+.session-card:active { transform: scale(.97); background: var(--surface2); }
+.session-card:active::before { transform: scaleX(1); }
+.session-card .icon { font-size: 24px; margin-bottom: 8px; }
+.session-card .name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; }
+.session-card .last { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
+.session-card .ex-count {
+  position: absolute; top: 10px; right: 10px;
+  background: var(--surface3); border-radius: 20px;
+  font-size: 10px; color: var(--text2); padding: 2px 8px; font-family: 'DM Mono', monospace;
+}
+.add-session-btn {
+  width: 100%; padding: 14px; border-radius: var(--radius);
+  background: var(--surface); border: 1px dashed var(--border);
+  color: var(--text3); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
 
-  /* ── HOME ── */
-  .home-date {
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    color: var(--text3); letter-spacing: 1px; margin-bottom: 20px;
-  }
-  .session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-  .session-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px 14px;
-    cursor: pointer; transition: all .15s; position: relative; overflow: hidden;
-  }
-  .session-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--accent); transform: scaleX(0); transform-origin: left;
-    transition: transform .2s;
-  }
-  .session-card:active { transform: scale(.97); background: var(--surface2); }
-  .session-card:active::before { transform: scaleX(1); }
-  .session-card .icon { font-size: 24px; margin-bottom: 8px; }
-  .session-card .name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; color: var(--text); }
-  .session-card .last { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
-  .session-card .ex-count { 
-    position: absolute; top: 10px; right: 10px;
-    background: var(--surface3); border-radius: 20px;
-    font-size: 10px; color: var(--text2); padding: 2px 8px;
-    font-family: 'DM Mono', monospace;
-  }
-  .add-session-btn {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: var(--surface); border: 1px dashed var(--border);
-    color: var(--text3); font-size: 14px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; transition: all .15s;
-  }
-  .add-session-btn:active { color: var(--text2); border-color: var(--text3); }
+.stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+.stat-box .val { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); }
+.stat-box .lbl { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; text-transform: uppercase; }
 
-  .stats-strip {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px;
-  }
-  .stat-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 12px;
-    text-align: center;
-  }
-  .stat-box .val { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); }
-  .stat-box .lbl { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .5px; }
+/* SESSION */
+.back-btn {
+  display: flex; align-items: center; gap: 8px; color: var(--text2); font-size: 13px;
+  cursor: pointer; margin-bottom: 16px; background: none; border: none; padding: 0; font-family: 'DM Sans', sans-serif;
+}
+.session-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; line-height: 1; margin-bottom: 4px; }
+.session-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); margin-bottom: 20px; }
 
-  /* ── SESSION VIEW ── */
-  .back-btn {
-    display: flex; align-items: center; gap: 8px;
-    color: var(--text2); font-size: 13px; cursor: pointer;
-    margin-bottom: 16px; background: none; border: none; padding: 0;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .back-btn:active { color: var(--text); }
-  .session-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; line-height: 1;
-    margin-bottom: 4px;
-  }
-  .session-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); margin-bottom: 20px; }
+.exercise-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+.ex-header { display: flex; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); gap: 10px; }
+.ex-name { font-weight: 600; font-size: 15px; flex: 1; }
+.ex-uni-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+.ex-uni-badge.bilateral { background: var(--surface3); color: var(--text3); }
+.ex-uni-badge.unilateral { background: rgba(91,143,255,.15); color: var(--uni-l); border: 1px solid rgba(91,143,255,.3); }
+.ex-delete { color: var(--text3); font-size: 16px; cursor: pointer; padding: 4px; }
+.ex-delete:active { color: var(--danger); }
 
-  .exercise-block {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); margin-bottom: 12px; overflow: hidden;
-  }
-  .ex-header {
-    display: flex; align-items: center; padding: 12px 14px;
-    border-bottom: 1px solid var(--border); gap: 10px;
-  }
-  .ex-name { font-weight: 600; font-size: 15px; flex: 1; }
-  .ex-uni-badge {
-    font-size: 10px; padding: 2px 8px; border-radius: 20px;
-    font-family: 'DM Mono', monospace; letter-spacing: .5px;
-  }
-  .ex-uni-badge.bilateral { background: var(--surface3); color: var(--text3); }
-  .ex-uni-badge.unilateral { background: rgba(91,143,255,.15); color: var(--uni-l); border: 1px solid rgba(91,143,255,.3); }
-  .ex-delete { color: var(--text3); font-size: 16px; cursor: pointer; padding: 4px; }
-  .ex-delete:active { color: var(--danger); }
+.sets-table { padding: 0 14px 8px; }
+.sets-header {
+  display: grid; padding: 8px 0 4px;
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3);
+  text-transform: uppercase; border-bottom: 1px solid var(--border); margin-bottom: 4px;
+}
+.sets-header.bilateral { grid-template-columns: 28px 1fr 1fr 1fr 36px; }
+.sets-header.unilateral { grid-template-columns: 28px 1fr 1fr 1fr 1fr 36px; }
+.set-row { display: grid; align-items: center; padding: 4px 0; gap: 4px; }
+.set-row.bilateral { grid-template-columns: 28px 1fr 1fr 1fr 36px; }
+.set-row.unilateral { grid-template-columns: 28px 1fr 1fr 1fr 1fr 36px; }
+.set-num {
+  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text3);
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--surface2); display: flex; align-items: center; justify-content: center;
+}
+.set-input {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 8px; color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 14px;
+  text-align: center; width: 100%; outline: none; transition: border-color .1s;
+  -webkit-appearance: none; appearance: none;
+}
+.set-input:focus { border-color: var(--accent); }
+.set-input.uni-l { border-color: rgba(91,143,255,.3); }
+.set-input.uni-r { border-color: rgba(255,107,107,.3); }
+.set-input.uni-l:focus { border-color: var(--uni-l); }
+.set-input.uni-r:focus { border-color: var(--uni-r); }
+.set-delete { color: var(--text3); font-size: 18px; cursor: pointer; text-align: center; }
+.set-delete:active { color: var(--danger); }
 
-  .sets-table { padding: 0 14px 8px; }
-  .sets-header {
-    display: grid; padding: 8px 0 4px;
-    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3);
-    text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-  }
-  .sets-header.bilateral { grid-template-columns: 28px 1fr 1fr 1fr 36px; }
-  .sets-header.unilateral { grid-template-columns: 28px 1fr 1fr 1fr 1fr 36px; }
-  .set-row { display: grid; align-items: center; padding: 4px 0; gap: 4px; }
-  .set-row.bilateral { grid-template-columns: 28px 1fr 1fr 1fr 36px; }
-  .set-row.unilateral { grid-template-columns: 28px 1fr 1fr 1fr 1fr 36px; }
-  .set-num {
-    font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text3);
-    width: 24px; height: 24px; border-radius: 50%;
-    background: var(--surface2); display: flex; align-items: center; justify-content: center;
-  }
-  .set-input {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 6px; padding: 6px 8px; color: var(--text);
-    font-family: 'DM Mono', monospace; font-size: 14px;
-    text-align: center; width: 100%; outline: none;
-    transition: border-color .1s;
-    -webkit-appearance: none; appearance: none;
-  }
-  .set-input:focus { border-color: var(--accent); }
-  .set-input.uni-l { border-color: rgba(91,143,255,.3); }
-  .set-input.uni-r { border-color: rgba(255,107,107,.3); }
-  .set-input.uni-l:focus { border-color: var(--uni-l); }
-  .set-input.uni-r:focus { border-color: var(--uni-r); }
-  .set-delete { color: var(--text3); font-size: 18px; cursor: pointer; text-align: center; line-height: 1; }
-  .set-delete:active { color: var(--danger); }
+.add-set-btn {
+  width: 100%; padding: 8px; margin-top: 4px; border-radius: var(--radius-sm);
+  background: none; border: 1px dashed var(--border);
+  color: var(--text3); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
 
-  .add-set-btn {
-    width: 100%; padding: 8px; margin-top: 4px; border-radius: var(--radius-sm);
-    background: none; border: 1px dashed var(--border);
-    color: var(--text3); font-size: 13px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; transition: all .15s;
-  }
-  .add-set-btn:active { background: var(--surface2); color: var(--text2); }
+.add-exercise-area { margin-top: 16px; }
+.btn-primary {
+  width: 100%; padding: 14px; border-radius: var(--radius);
+  background: var(--accent); color: #000; border: none;
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; cursor: pointer;
+}
+.btn-primary:active { opacity: .85; transform: scale(.98); }
+.btn-secondary {
+  width: 100%; padding: 12px; border-radius: var(--radius);
+  background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 8px;
+}
+.finish-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; margin-bottom: 24px; }
+.one-rm-tag { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  .set-volume-tag {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    color: var(--accent2); margin-left: 4px;
-  }
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.85);
+  z-index: 200; display: none; align-items: flex-end; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+}
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; margin-bottom: 16px; }
+.modal-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+.modal-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; margin-bottom: 14px;
+}
+.modal-input:focus { border-color: var(--accent); }
+.toggle-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.toggle-btn {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text2); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.toggle-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
 
-  .add-exercise-area { margin-top: 16px; }
-  .btn-primary {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: var(--accent); color: #000; border: none;
-    font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px;
-    cursor: pointer; transition: all .1s;
-  }
-  .btn-primary:active { transform: scale(.98); opacity: .9; }
-  .btn-secondary {
-    width: 100%; padding: 12px; border-radius: var(--radius);
-    background: var(--surface2); color: var(--text); border: 1px solid var(--border);
-    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
-    cursor: pointer; transition: all .1s; margin-top: 8px;
-  }
-  .btn-secondary:active { background: var(--surface3); }
+/* DASHBOARD */
+.dash-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; color: var(--text2); margin: 20px 0 10px; }
+.filter-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-chip {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text2); font-size: 12px; cursor: pointer; font-family: 'DM Mono', monospace; white-space: nowrap;
+}
+.filter-chip.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.chart-title { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 12px; text-transform: uppercase; }
+canvas { display: block; }
 
-  .finish-strip {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; margin-bottom: 24px;
-  }
+.week-compare { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+.wc-header { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); text-transform: uppercase; }
+.wc-header div, .wc-row div { padding: 10px 12px; }
+.wc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); font-size: 13px; }
+.wc-row:last-child { border-bottom: none; }
+.wc-delta { font-family: 'DM Mono', monospace; font-size: 12px; }
+.wc-delta.pos { color: var(--success); }
+.wc-delta.neg { color: var(--danger); }
+.wc-delta.neu { color: var(--text3); }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.8);
-    z-index: 200; display: none; align-items: flex-end; justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px 20px 0 0; padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
-    width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
-  }
-  .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
-  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; margin-bottom: 16px; }
-  .modal-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
-  .modal-input {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 14px; color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none;
-    margin-bottom: 14px; transition: border-color .1s;
-  }
-  .modal-input:focus { border-color: var(--accent); }
-  .toggle-row { display: flex; gap: 8px; margin-bottom: 14px; }
-  .toggle-btn {
-    flex: 1; padding: 10px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text2); font-size: 13px; cursor: pointer; transition: all .15s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .toggle-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+/* HISTORY */
+.history-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 8px; }
+.hi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.hi-session { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; }
+.hi-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
+.hi-stats { display: flex; gap: 12px; margin-top: 8px; }
+.hi-stat { font-size: 12px; color: var(--text2); }
+.hi-stat strong { color: var(--accent); font-family: 'DM Mono', monospace; }
+.hi-delete { color: var(--text3); font-size: 16px; cursor: pointer; padding: 4px 8px; }
+.hi-delete:active { color: var(--danger); }
 
-  /* ── DASHBOARD ── */
-  .dash-section-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px;
-    color: var(--text2); margin: 20px 0 10px;
-  }
-  .filter-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
-  .filter-scroll::-webkit-scrollbar { display: none; }
-  .filter-chip {
-    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text2); font-size: 12px; cursor: pointer; transition: all .1s;
-    font-family: 'DM Mono', monospace; white-space: nowrap;
-  }
-  .filter-chip.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+.empty-state .big { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--surface3); margin-bottom: 8px; }
 
-  .chart-container {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
-  }
-  .chart-title { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
-  canvas { display: block; }
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg); border-top: 1px solid var(--border);
+  display: flex; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); z-index: 100;
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: var(--text3); cursor: pointer; padding: 6px; border: none; background: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-btn.active { color: var(--accent); }
+.nav-btn .nav-icon { font-size: 22px; }
+.nav-btn .nav-label { font-size: 10px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; }
+.content-wrap { padding-bottom: 80px; }
 
-  .week-compare {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden; margin-bottom: 12px;
-  }
-  .wc-header {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    border-bottom: 1px solid var(--border);
-    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3);
-    text-transform: uppercase;
-  }
-  .wc-header div, .wc-row div { padding: 10px 12px; }
-  .wc-row {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    border-bottom: 1px solid var(--border); font-size: 13px;
-  }
-  .wc-row:last-child { border-bottom: none; }
-  .wc-row .session-col { font-weight: 500; }
-  .wc-delta { font-family: 'DM Mono', monospace; font-size: 12px; }
-  .wc-delta.pos { color: var(--success); }
-  .wc-delta.neg { color: var(--danger); }
-  .wc-delta.neu { color: var(--text3); }
+/* TOAST */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface3); color: var(--text); padding: 10px 20px;
+  border-radius: 20px; font-size: 13px; z-index: 300;
+  opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap;
+  border: 1px solid var(--border);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ── HISTORY VIEW ── */
-  .history-item {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px; margin-bottom: 8px; cursor: pointer;
-    transition: all .1s;
-  }
-  .history-item:active { background: var(--surface2); }
-  .hi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .hi-session { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; }
-  .hi-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
-  .hi-stats { display: flex; gap: 12px; }
-  .hi-stat { font-size: 12px; color: var(--text2); }
-  .hi-stat strong { color: var(--accent); font-family: 'DM Mono', monospace; }
-  .hi-delete { color: var(--text3); font-size: 16px; cursor: pointer; padding: 4px 8px; }
-  .hi-delete:active { color: var(--danger); }
+/* LOADING */
+.loading-screen {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 500; gap: 16px;
+}
+.loading-title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; color: var(--accent); }
+.loading-bar { width: 200px; height: 2px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+.loading-fill { height: 100%; background: var(--accent); animation: loading 1.5s ease-in-out infinite; }
+@keyframes loading { 0%{width:0;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0;margin-left:100%} }
+.loading-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
 
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
-  .empty-state .big { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--surface3); margin-bottom: 8px; }
-  .empty-state p { font-size: 14px; }
-
-  /* ── BOTTOM NAV ── */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--bg); border-top: 1px solid var(--border);
-    display: flex; padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
-    z-index: 100;
-  }
-  .nav-btn {
-    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--text3); cursor: pointer; padding: 6px; border: none; background: none;
-    transition: color .15s; font-family: 'DM Sans', sans-serif;
-  }
-  .nav-btn.active { color: var(--accent); }
-  .nav-btn .nav-icon { font-size: 22px; }
-  .nav-btn .nav-label { font-size: 10px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; }
-
-  .content-wrap { padding-bottom: 80px; }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--surface3); color: var(--text); padding: 10px 20px;
-    border-radius: 20px; font-size: 13px; z-index: 300;
-    opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap;
-    border: 1px solid var(--border);
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  input[type=number] { -moz-appearance: textfield; }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-  .rpe-dot {
-    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-    margin-right: 4px; vertical-align: middle;
-  }
-  .one-rm-tag { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+input[type=number] { -moz-appearance: textfield; }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-title">IRON LOG</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+  <div class="loading-text" id="loadingText">Chargement des données...</div>
+</div>
 
 <div class="app-header">
   <div>
@@ -354,12 +294,14 @@
     <div class="app-subtitle">Training Tracker</div>
   </div>
   <div class="header-right">
-    <button class="icon-btn" id="clearDataBtn" title="Effacer toutes les données" onclick="confirmClearData()">🗑</button>
+    <div class="sync-badge" id="syncBadge">
+      <div class="sync-dot"></div>
+      <span id="syncText">Cloud</span>
+    </div>
   </div>
 </div>
 
 <div class="content-wrap">
-
   <!-- HOME -->
   <div class="view active" id="view-home">
     <div class="home-date" id="homeDateLabel"></div>
@@ -388,21 +330,18 @@
   <div class="view" id="view-dashboard">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:4px;">PROGRESSION</div>
     <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);margin-bottom:16px;">Analyse de tes performances</div>
-
     <div class="dash-section-title">PROGRESSION POIDS</div>
     <div class="filter-scroll" id="exerciseFilter"></div>
     <div class="chart-container">
       <div class="chart-title" id="weightChartTitle">Poids max par séance</div>
       <canvas id="weightChart" height="180"></canvas>
     </div>
-
     <div class="dash-section-title">VOLUME PAR SÉANCE</div>
     <div class="filter-scroll" id="sessionFilter"></div>
     <div class="chart-container">
       <div class="chart-title">Volume total (kg × reps)</div>
       <canvas id="volumeChart" height="180"></canvas>
     </div>
-
     <div class="dash-section-title">COMPARAISON SEMAINES</div>
     <div class="week-compare" id="weekCompare"></div>
   </div>
@@ -413,7 +352,6 @@
     <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);margin-bottom:16px;">Toutes tes séances</div>
     <div id="historyList"></div>
   </div>
-
 </div>
 
 <!-- BOTTOM NAV -->
@@ -437,9 +375,9 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">NOUVELLE SÉANCE</div>
-    <div class="modal-label">Nom de la séance</div>
-    <input class="modal-input" id="newSessionName" placeholder="ex: LEGDAY, PECS, DOS..." oninput="updateSessionEmoji()">
-    <div class="modal-label">Emoji (optionnel)</div>
+    <div class="modal-label">Nom</div>
+    <input class="modal-input" id="newSessionName" placeholder="ex: LEGDAY, PECS..." oninput="updateSessionEmoji()">
+    <div class="modal-label">Emoji</div>
     <input class="modal-input" id="newSessionEmoji" placeholder="🦵" style="font-size:24px;text-align:center;">
     <button class="btn-primary" onclick="addSession()">CRÉER</button>
     <button class="btn-secondary" onclick="closeModal('modalAddSession')">Annuler</button>
@@ -451,7 +389,7 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">AJOUTER UN EXERCICE</div>
-    <div class="modal-label">Nom de l'exercice</div>
+    <div class="modal-label">Nom</div>
     <input class="modal-input" id="newExName" placeholder="ex: Hack Squat, Leg Curl...">
     <div id="exSuggestions" style="display:none;margin-bottom:12px;"></div>
     <div class="modal-label">Type</div>
@@ -459,7 +397,7 @@
       <button class="toggle-btn active" id="toggleBi" onclick="setUni(false)">Bilatéral</button>
       <button class="toggle-btn" id="toggleUni" onclick="setUni(true)">Unilatéral 🦾</button>
     </div>
-    <div class="modal-label">Nombre de séries par défaut</div>
+    <div class="modal-label">Séries par défaut</div>
     <div class="toggle-row" id="defaultSetsBtns">
       <button class="toggle-btn active" onclick="setDefaultSets(3,this)">3</button>
       <button class="toggle-btn" onclick="setDefaultSets(4,this)">4</button>
@@ -475,55 +413,142 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
 // ══════════════════════════════════════════════
+//  CLOUD STORAGE — Claude Persistent Storage API
+// ══════════════════════════════════════════════
+const STORAGE_KEYS = {
+  state: 'ironlog_state_v1',
+  currentLog: 'ironlog_current_log_v1'
+};
+
+async function cloudGet(key) {
+  try {
+    const result = await window.storage.get(key);
+    return result ? JSON.parse(result.value) : null;
+  } catch(e) { return null; }
+}
+
+async function cloudSet(key, value) {
+  try {
+    await window.storage.set(key, JSON.stringify(value));
+    return true;
+  } catch(e) { return false; }
+}
+
+async function cloudDelete(key) {
+  try {
+    await window.storage.delete(key);
+    return true;
+  } catch(e) { return false; }
+}
+
+// ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
-const STORAGE_KEY = 'ironlog_v3';
-let state = load();
+const DEFAULT_STATE = {
+  sessions: [
+    { id: 'legday', name: 'LEGDAY', emoji: '🦵', exercises: [] },
+    { id: 'pecs', name: 'PECS', emoji: '🫀', exercises: [] },
+    { id: 'bras', name: 'BRAS', emoji: '💪', exercises: [] },
+    { id: 'dos', name: 'DOS', emoji: '🏋️', exercises: [] },
+    { id: 'epaules', name: 'ÉPAULES', emoji: '🔝', exercises: [] },
+  ],
+  logs: []
+};
 
-function load() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return {
-    sessions: [
-      { id: 'legday', name: 'LEGDAY', emoji: '🦵', exercises: [] },
-      { id: 'pecs', name: 'PECS', emoji: '🫀', exercises: [] },
-      { id: 'bras', name: 'BRAS', emoji: '💪', exercises: [] },
-      { id: 'dos', name: 'DOS', emoji: '🏋️', exercises: [] },
-      { id: 'epaules', name: 'ÉPAULES', emoji: '🔝', exercises: [] },
-    ],
-    logs: [] // { id, sessionId, date, exercises: [{name, unilateral, sets:[{reps,weight,rpe,side?}]}] }
-  };
-}
-
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// ══════════════════════════════════════════════
-//  CURRENT SESSION STATE
-// ══════════════════════════════════════════════
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 let currentSessionId = null;
-let currentLog = null; // live editing log
+let currentLog = null;
+let saveTimeout = null;
+let wChartInst = null, vChartInst = null;
+let selectedExerciseFilter = null, selectedSessionFilter = null;
+
+// ══════════════════════════════════════════════
+//  SYNC ENGINE — debounced auto-save
+// ══════════════════════════════════════════════
+function setSyncStatus(status, text) {
+  const badge = document.getElementById('syncBadge');
+  const label = document.getElementById('syncText');
+  badge.className = 'sync-badge ' + status;
+  label.textContent = text;
+}
+
+async function saveState() {
+  setSyncStatus('saving', 'Sauvegarde...');
+  const ok = await cloudSet(STORAGE_KEYS.state, state);
+  if (ok) {
+    setSyncStatus('saved', '✓ Sauvé');
+    setTimeout(() => setSyncStatus('', 'Cloud'), 2000);
+  } else {
+    setSyncStatus('error', '! Erreur');
+    // Fallback to localStorage
+    try { localStorage.setItem('ironlog_fallback', JSON.stringify(state)); } catch(e) {}
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(saveState, 800);
+}
+
+async function saveCurrentLog() {
+  if (!currentLog) { await cloudDelete(STORAGE_KEYS.currentLog); return; }
+  await cloudSet(STORAGE_KEYS.currentLog, currentLog);
+}
+
+// ══════════════════════════════════════════════
+//  INIT — load from cloud
+// ══════════════════════════════════════════════
+async function init() {
+  document.getElementById('loadingText').textContent = 'Connexion au cloud...';
+
+  // Load main state
+  const savedState = await cloudGet(STORAGE_KEYS.state);
+  if (savedState && savedState.sessions) {
+    state = savedState;
+    document.getElementById('loadingText').textContent = `${state.logs.length} séances récupérées ✓`;
+  } else {
+    // Try localStorage fallback
+    try {
+      const fb = localStorage.getItem('ironlog_fallback');
+      if (fb) { state = JSON.parse(fb); }
+    } catch(e) {}
+    document.getElementById('loadingText').textContent = 'Première utilisation';
+  }
+
+  // Recover crashed session
+  const savedLog = await cloudGet(STORAGE_KEYS.currentLog);
+  if (savedLog && savedLog.sessionId) {
+    currentLog = savedLog;
+    currentSessionId = savedLog.sessionId;
+    const session = state.sessions.find(s => s.id === currentSessionId);
+    if (session) {
+      document.getElementById('sessionTitle').textContent = session.emoji + ' ' + session.name;
+      document.getElementById('sessionMeta').textContent = new Date(savedLog.date).toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+      document.getElementById('nav-session').style.display = 'flex';
+      renderExercises();
+      document.getElementById('loadingText').textContent = '⚡ Séance en cours récupérée !';
+    }
+  }
+
+  await new Promise(r => setTimeout(r, 800));
+  document.getElementById('loadingScreen').style.opacity = '0';
+  document.getElementById('loadingScreen').style.transition = 'opacity .4s';
+  setTimeout(() => { document.getElementById('loadingScreen').style.display = 'none'; }, 400);
+
+  setSyncStatus('saved', '✓ Cloud');
+  setTimeout(() => setSyncStatus('', 'Cloud'), 2000);
+  renderHome();
+}
 
 // ══════════════════════════════════════════════
 //  VIEWS
 // ══════════════════════════════════════════════
-let currentView = 'home';
-let chartsBuilt = false;
-let wChartInst = null, vChartInst = null;
-let selectedExerciseFilter = null;
-let selectedSessionFilter = null;
-
 function switchView(v) {
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('view-' + v).classList.add('active');
   const nb = document.getElementById('nav-' + v);
   if (nb) nb.classList.add('active');
-  currentView = v;
-
   if (v === 'home') renderHome();
   if (v === 'dashboard') renderDashboard();
   if (v === 'history') renderHistory();
@@ -535,30 +560,23 @@ function switchView(v) {
 function renderHome() {
   const d = new Date();
   document.getElementById('homeDateLabel').textContent =
-    d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+    d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'}).toUpperCase();
 
-  // Stats
   const totalLogs = state.logs.length;
-  const thisWeek = state.logs.filter(l => {
-    const ld = new Date(l.date);
-    const now = new Date();
-    const diff = (now - ld) / (1000 * 60 * 60 * 24);
-    return diff <= 7;
-  }).length;
-  const totalVol = state.logs.reduce((sum, l) => sum + calcLogVolume(l), 0);
+  const thisWeek = state.logs.filter(l => (new Date() - new Date(l.date)) / 86400000 <= 7).length;
+  const totalVol = state.logs.reduce((s, l) => s + calcLogVolume(l), 0);
 
   document.getElementById('statsStrip').innerHTML = `
     <div class="stat-box"><div class="val">${totalLogs}</div><div class="lbl">Séances</div></div>
-    <div class="stat-box"><div class="val">${thisWeek}</div><div class="lbl">Ce mois</div></div>
-    <div class="stat-box"><div class="val">${Math.round(totalVol / 1000)}T</div><div class="lbl">Volume</div></div>
+    <div class="stat-box"><div class="val">${thisWeek}</div><div class="lbl">7 jours</div></div>
+    <div class="stat-box"><div class="val">${Math.round(totalVol/1000)}T</div><div class="lbl">Volume</div></div>
   `;
 
-  // Session cards
   const grid = document.getElementById('sessionGrid');
   grid.innerHTML = '';
   state.sessions.forEach(s => {
     const lastLog = [...state.logs].reverse().find(l => l.sessionId === s.id);
-    const lastDate = lastLog ? new Date(lastLog.date).toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit'}) : '—';
+    const lastDate = lastLog ? new Date(lastLog.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit'}) : '—';
     const div = document.createElement('div');
     div.className = 'session-card';
     div.onclick = () => startSession(s.id);
@@ -574,43 +592,40 @@ function renderHome() {
 
 function calcLogVolume(log) {
   let v = 0;
-  (log.exercises || []).forEach(ex => {
-    (ex.sets || []).forEach(s => {
-      v += (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0);
-    });
-  });
+  (log.exercises || []).forEach(ex =>
+    (ex.sets || []).forEach(s => { v += (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0); })
+  );
   return v;
 }
 
 // ══════════════════════════════════════════════
-//  START SESSION
+//  SESSION
 // ══════════════════════════════════════════════
 function startSession(sessionId) {
   currentSessionId = sessionId;
   const session = state.sessions.find(s => s.id === sessionId);
-  
-  // Build live log from session template
+
   currentLog = {
     id: Date.now().toString(),
     sessionId,
     date: new Date().toISOString(),
     exercises: session.exercises.map(ex => ({
-      name: ex.name,
-      unilateral: ex.unilateral,
-      sets: Array.from({ length: ex.defaultSets || 3 }, () =>
+      name: ex.name, unilateral: ex.unilateral,
+      sets: Array.from({length: ex.defaultSets || 3}, () =>
         ex.unilateral
-          ? { repsL: '', weightL: '', repsR: '', weightR: '', rpe: '' }
-          : { reps: '', weight: '', rpe: '' }
+          ? {repsL:'', weightL:'', repsR:'', weightR:'', rpe:''}
+          : {reps:'', weight:'', rpe:''}
       )
     }))
   };
 
   document.getElementById('sessionTitle').textContent = session.emoji + ' ' + session.name;
   document.getElementById('sessionMeta').textContent = new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
-
-  // Show session nav btn
   document.getElementById('nav-session').style.display = 'flex';
-  
+
+  // Save current log immediately to cloud
+  saveCurrentLog();
+
   renderExercises();
   switchView('session');
 }
@@ -621,10 +636,8 @@ function renderExercises() {
   (currentLog.exercises || []).forEach((ex, exIdx) => {
     const block = document.createElement('div');
     block.className = 'exercise-block';
-    
     const isUni = ex.unilateral;
     const oneRM = calcOneRM(ex);
-    
     block.innerHTML = `
       <div class="ex-header">
         <div class="ex-name">${ex.name}${oneRM ? `<span class="one-rm-tag"> · 1RM≈${oneRM}kg</span>` : ''}</div>
@@ -636,8 +649,7 @@ function renderExercises() {
           <div>#</div>
           ${isUni
             ? '<div style="color:var(--uni-l)">KG G</div><div style="color:var(--uni-l)">REPS G</div><div style="color:var(--uni-r)">KG D</div><div style="color:var(--uni-r)">REPS D</div>'
-            : '<div>KG</div><div>REPS</div><div>RPE</div>'
-          }
+            : '<div>KG</div><div>REPS</div><div>RPE</div>'}
           <div></div>
         </div>
         <div id="sets-${exIdx}"></div>
@@ -654,33 +666,30 @@ function renderSets(exIdx) {
   const container = document.getElementById('sets-' + exIdx);
   if (!container) return;
   container.innerHTML = '';
-  
   ex.sets.forEach((set, sIdx) => {
     const row = document.createElement('div');
     row.className = 'set-row ' + (ex.unilateral ? 'unilateral' : 'bilateral');
-    
     if (ex.unilateral) {
       row.innerHTML = `
-        <div class="set-num">${sIdx + 1}</div>
-        <input class="set-input uni-l" type="number" inputmode="decimal" placeholder="kg" value="${set.weightL || ''}"
+        <div class="set-num">${sIdx+1}</div>
+        <input class="set-input uni-l" type="number" inputmode="decimal" placeholder="kg" value="${set.weightL||''}"
           onchange="updateSet(${exIdx},${sIdx},'weightL',this.value)" onfocus="this.select()">
-        <input class="set-input uni-l" type="number" inputmode="numeric" placeholder="reps" value="${set.repsL || ''}"
+        <input class="set-input uni-l" type="number" inputmode="numeric" placeholder="reps" value="${set.repsL||''}"
           onchange="updateSet(${exIdx},${sIdx},'repsL',this.value)" onfocus="this.select()">
-        <input class="set-input uni-r" type="number" inputmode="decimal" placeholder="kg" value="${set.weightR || ''}"
+        <input class="set-input uni-r" type="number" inputmode="decimal" placeholder="kg" value="${set.weightR||''}"
           onchange="updateSet(${exIdx},${sIdx},'weightR',this.value)" onfocus="this.select()">
-        <input class="set-input uni-r" type="number" inputmode="numeric" placeholder="reps" value="${set.repsR || ''}"
+        <input class="set-input uni-r" type="number" inputmode="numeric" placeholder="reps" value="${set.repsR||''}"
           onchange="updateSet(${exIdx},${sIdx},'repsR',this.value)" onfocus="this.select()">
         <span class="set-delete" onclick="deleteSet(${exIdx},${sIdx})">−</span>
       `;
     } else {
-      const vol = set.weight && set.reps ? `${(parseFloat(set.weight) * parseInt(set.reps)).toFixed(0)}kg` : '';
       row.innerHTML = `
-        <div class="set-num">${sIdx + 1}</div>
-        <input class="set-input" type="number" inputmode="decimal" placeholder="kg" value="${set.weight || ''}"
-          onchange="updateSet(${exIdx},${sIdx},'weight',this.value);updateSetVolume(${exIdx},${sIdx})" onfocus="this.select()">
-        <input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="${set.reps || ''}"
-          onchange="updateSet(${exIdx},${sIdx},'reps',this.value);updateSetVolume(${exIdx},${sIdx})" onfocus="this.select()">
-        <input class="set-input" type="number" inputmode="numeric" placeholder="RPE" min="1" max="10" value="${set.rpe || ''}"
+        <div class="set-num">${sIdx+1}</div>
+        <input class="set-input" type="number" inputmode="decimal" placeholder="kg" value="${set.weight||''}"
+          onchange="updateSet(${exIdx},${sIdx},'weight',this.value)" onfocus="this.select()">
+        <input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="${set.reps||''}"
+          onchange="updateSet(${exIdx},${sIdx},'reps',this.value)" onfocus="this.select()">
+        <input class="set-input" type="number" inputmode="numeric" placeholder="RPE" min="1" max="10" value="${set.rpe||''}"
           onchange="updateSet(${exIdx},${sIdx},'rpe',this.value)" onfocus="this.select()">
         <span class="set-delete" onclick="deleteSet(${exIdx},${sIdx})">−</span>
       `;
@@ -691,49 +700,40 @@ function renderSets(exIdx) {
 
 function updateSet(exIdx, sIdx, field, value) {
   currentLog.exercises[exIdx].sets[sIdx][field] = value;
-}
-
-function updateSetVolume(exIdx, sIdx) {
-  // Lightweight re-render of just that row (future optimization)
+  // Auto-save current log after each input
+  clearTimeout(window._logSaveTimer);
+  window._logSaveTimer = setTimeout(saveCurrentLog, 1500);
 }
 
 function addSet(exIdx) {
   const ex = currentLog.exercises[exIdx];
   const newSet = ex.unilateral
-    ? { repsL: '', weightL: '', repsR: '', weightR: '', rpe: '' }
-    : { reps: '', weight: '', rpe: '' };
-  
-  // Pre-fill from last set
-  if (ex.sets.length > 0) {
-    const last = ex.sets[ex.sets.length - 1];
-    Object.assign(newSet, last);
-    if (!ex.unilateral) { newSet.reps = last.reps; newSet.weight = last.weight; }
-  }
-  
+    ? {repsL:'', weightL:'', repsR:'', weightR:'', rpe:''}
+    : {reps:'', weight:'', rpe:''};
+  if (ex.sets.length > 0) Object.assign(newSet, ex.sets[ex.sets.length - 1]);
   ex.sets.push(newSet);
   renderSets(exIdx);
+  saveCurrentLog();
 }
 
 function deleteSet(exIdx, sIdx) {
   currentLog.exercises[exIdx].sets.splice(sIdx, 1);
   renderSets(exIdx);
+  saveCurrentLog();
 }
 
 function deleteExercise(exIdx) {
   currentLog.exercises.splice(exIdx, 1);
   renderExercises();
+  saveCurrentLog();
 }
 
 function calcOneRM(ex) {
   if (ex.unilateral) return null;
   let best = 0;
   ex.sets.forEach(s => {
-    const w = parseFloat(s.weight);
-    const r = parseInt(s.reps);
-    if (w && r) {
-      const orm = w * (1 + r / 30);
-      if (orm > best) best = orm;
-    }
+    const w = parseFloat(s.weight), r = parseInt(s.reps);
+    if (w && r) { const orm = w * (1 + r/30); if (orm > best) best = orm; }
   });
   return best > 0 ? Math.round(best) : null;
 }
@@ -741,46 +741,46 @@ function calcOneRM(ex) {
 // ══════════════════════════════════════════════
 //  FINISH SESSION
 // ══════════════════════════════════════════════
-function finishSession() {
-  // Validate at least one set has data
+async function finishSession() {
   const hasData = currentLog.exercises.some(ex =>
     ex.sets.some(s => (s.weight || s.weightL) && (s.reps || s.repsL))
   );
-  
-  if (!hasData && currentLog.exercises.length > 0) {
-    showToast('⚠️ Remplis au moins une série !');
-    return;
-  }
+  if (!hasData && currentLog.exercises.length > 0) { showToast('⚠️ Remplis au moins une série !'); return; }
 
-  // Save exercises back to session template (memory)
   const session = state.sessions.find(s => s.id === currentSessionId);
   currentLog.exercises.forEach(ex => {
     const existing = session.exercises.find(e => e.name === ex.name);
-    if (!existing) {
-      session.exercises.push({
-        name: ex.name,
-        unilateral: ex.unilateral,
-        defaultSets: ex.sets.length
-      });
-    } else {
-      existing.defaultSets = ex.sets.length;
-    }
+    if (!existing) session.exercises.push({name: ex.name, unilateral: ex.unilateral, defaultSets: ex.sets.length});
+    else existing.defaultSets = ex.sets.length;
   });
 
-  // Save log
   state.logs.push(JSON.parse(JSON.stringify(currentLog)));
-  save();
 
-  showToast('✅ Séance sauvegardée !');
+  // Save state + clear current log
+  setSyncStatus('saving', 'Sauvegarde...');
+  const ok = await cloudSet(STORAGE_KEYS.state, state);
+  await cloudDelete(STORAGE_KEYS.currentLog);
+
+  if (ok) {
+    setSyncStatus('saved', '✓ Sauvé');
+    showToast('✅ Séance sauvegardée dans le cloud !');
+  } else {
+    setSyncStatus('error', '! Local uniquement');
+    try { localStorage.setItem('ironlog_fallback', JSON.stringify(state)); } catch(e) {}
+    showToast('⚠️ Sauvegardé en local (cloud indispo)');
+  }
+
+  setTimeout(() => setSyncStatus('', 'Cloud'), 3000);
   document.getElementById('nav-session').style.display = 'none';
   currentLog = null;
   currentSessionId = null;
   switchView('home');
 }
 
-function goHome() {
+async function goHome() {
   if (currentLog) {
-    if (!confirm('Abandonner la séance en cours ?')) return;
+    if (!confirm('Abandonner la séance ? (Les données saisies sont déjà sauvegardées)')) return;
+    await cloudDelete(STORAGE_KEYS.currentLog);
     currentLog = null;
     currentSessionId = null;
     document.getElementById('nav-session').style.display = 'none';
@@ -789,7 +789,7 @@ function goHome() {
 }
 
 // ══════════════════════════════════════════════
-//  ADD SESSION MODAL
+//  ADD SESSION
 // ══════════════════════════════════════════════
 function openAddSession() {
   document.getElementById('newSessionName').value = '';
@@ -798,18 +798,12 @@ function openAddSession() {
   setTimeout(() => document.getElementById('newSessionName').focus(), 300);
 }
 
-const emojiMap = {
-  'leg': '🦵', 'squat': '🦵', 'pecs': '🫀', 'chest': '🫀', 'bras': '💪', 'arm': '💪',
-  'dos': '🏋️', 'back': '🏋️', 'epaule': '🔝', 'shoulder': '🔝', 'cardio': '🏃', 'full': '⚡'
-};
+const emojiMap = {'leg':'🦵','squat':'🦵','pecs':'🫀','chest':'🫀','bras':'💪','arm':'💪','dos':'🏋️','back':'🏋️','epaule':'🔝','shoulder':'🔝','cardio':'🏃','full':'⚡'};
 
 function updateSessionEmoji() {
   const name = document.getElementById('newSessionName').value.toLowerCase();
-  for (const [key, emoji] of Object.entries(emojiMap)) {
-    if (name.includes(key)) {
-      document.getElementById('newSessionEmoji').value = emoji;
-      break;
-    }
+  for (const [k, v] of Object.entries(emojiMap)) {
+    if (name.includes(k)) { document.getElementById('newSessionEmoji').value = v; break; }
   }
 }
 
@@ -817,20 +811,18 @@ function addSession() {
   const name = document.getElementById('newSessionName').value.trim().toUpperCase();
   const emoji = document.getElementById('newSessionEmoji').value.trim() || '💪';
   if (!name) return;
-  
-  const id = name.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
-  state.sessions.push({ id, name, emoji, exercises: [] });
-  save();
+  const id = name.toLowerCase().replace(/[^a-z0-9]/g,'_') + '_' + Date.now();
+  state.sessions.push({id, name, emoji, exercises: []});
+  scheduleSave();
   closeModal('modalAddSession');
   renderHome();
   showToast('✅ Séance créée !');
 }
 
 // ══════════════════════════════════════════════
-//  ADD EXERCISE MODAL
+//  ADD EXERCISE
 // ══════════════════════════════════════════════
-let newExUnilateral = false;
-let newExDefaultSets = 3;
+let newExUnilateral = false, newExDefaultSets = 3;
 
 function openAddExercise() {
   document.getElementById('newExName').value = '';
@@ -839,44 +831,35 @@ function openAddExercise() {
   setDefaultSets(3, document.getElementById('defaultSetsBtns').children[0]);
   document.getElementById('modalAddExercise').classList.add('open');
   setTimeout(() => document.getElementById('newExName').focus(), 300);
-  
-  // Show suggestions from this session's past exercises
   showExSuggestions();
 }
 
 function showExSuggestions() {
   const session = state.sessions.find(s => s.id === currentSessionId);
   if (!session || session.exercises.length === 0) return;
-  
   const existing = new Set(currentLog.exercises.map(e => e.name));
   const suggestions = session.exercises.filter(e => !existing.has(e.name));
-  
   if (suggestions.length === 0) return;
-  
   const container = document.getElementById('exSuggestions');
   container.style.display = 'block';
   container.innerHTML = '<div style="font-size:11px;color:var(--text3);margin-bottom:6px;font-family:DM Mono,monospace;">EXERCICES PRÉCÉDENTS</div>' +
     suggestions.map(e => `
-      <button onclick="quickAddExercise('${e.name.replace(/'/g, "\\'")}', ${e.unilateral}, ${e.defaultSets || 3})"
-        style="display:inline-block;margin:3px;padding:6px 12px;border-radius:20px;background:var(--surface2);
-          border:1px solid var(--border);color:var(--text2);font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;">
+      <button onclick="quickAddExercise('${e.name.replace(/'/g,"\\'")}',${e.unilateral},${e.defaultSets||3})"
+        style="display:inline-block;margin:3px;padding:6px 12px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:12px;cursor:pointer;">
         ${e.unilateral ? '🦾 ' : ''}${e.name}
-      </button>
-    `).join('');
+      </button>`).join('');
 }
 
 function quickAddExercise(name, unilateral, defaultSets) {
   currentLog.exercises.push({
-    name,
-    unilateral,
-    sets: Array.from({ length: defaultSets }, () =>
-      unilateral
-        ? { repsL: '', weightL: '', repsR: '', weightR: '', rpe: '' }
-        : { reps: '', weight: '', rpe: '' }
+    name, unilateral,
+    sets: Array.from({length: defaultSets}, () =>
+      unilateral ? {repsL:'',weightL:'',repsR:'',weightR:'',rpe:''} : {reps:'',weight:'',rpe:''}
     )
   });
   closeModal('modalAddExercise');
   renderExercises();
+  saveCurrentLog();
   showToast('✅ ' + name + ' ajouté !');
 }
 
@@ -895,28 +878,21 @@ function setDefaultSets(n, btn) {
 function addExercise() {
   const name = document.getElementById('newExName').value.trim();
   if (!name) { showToast('⚠️ Donne un nom !'); return; }
-  
   const ex = {
-    name,
-    unilateral: newExUnilateral,
-    sets: Array.from({ length: newExDefaultSets }, () =>
-      newExUnilateral
-        ? { repsL: '', weightL: '', repsR: '', weightR: '', rpe: '' }
-        : { reps: '', weight: '', rpe: '' }
+    name, unilateral: newExUnilateral,
+    sets: Array.from({length: newExDefaultSets}, () =>
+      newExUnilateral ? {repsL:'',weightL:'',repsR:'',weightR:'',rpe:''} : {reps:'',weight:'',rpe:''}
     )
   };
-  
   currentLog.exercises.push(ex);
-  
-  // Remember in session template
   const session = state.sessions.find(s => s.id === currentSessionId);
   if (!session.exercises.find(e => e.name === name)) {
-    session.exercises.push({ name, unilateral: newExUnilateral, defaultSets: newExDefaultSets });
-    save();
+    session.exercises.push({name, unilateral: newExUnilateral, defaultSets: newExDefaultSets});
+    scheduleSave();
   }
-  
   closeModal('modalAddExercise');
   renderExercises();
+  saveCurrentLog();
   showToast('✅ ' + name + ' ajouté !');
 }
 
@@ -931,9 +907,7 @@ function renderDashboard() {
 
 function getAllExerciseNames() {
   const names = new Set();
-  state.logs.forEach(l => (l.exercises || []).forEach(e => {
-    if (!e.unilateral) names.add(e.name);
-  }));
+  state.logs.forEach(l => (l.exercises||[]).forEach(e => { if (!e.unilateral) names.add(e.name); }));
   return [...names];
 }
 
@@ -942,9 +916,7 @@ function buildExerciseFilter() {
   const container = document.getElementById('exerciseFilter');
   container.innerHTML = '';
   if (names.length === 0) { container.innerHTML = '<div style="color:var(--text3);font-size:13px;">Aucune donnée encore</div>'; return; }
-  
   if (!selectedExerciseFilter || !names.includes(selectedExerciseFilter)) selectedExerciseFilter = names[0];
-  
   names.forEach(n => {
     const chip = document.createElement('button');
     chip.className = 'filter-chip' + (n === selectedExerciseFilter ? ' active' : '');
@@ -958,51 +930,26 @@ function buildExerciseFilter() {
 function buildWeightChart() {
   if (!selectedExerciseFilter) return;
   const logs = state.logs.filter(l => (l.exercises||[]).some(e => e.name === selectedExerciseFilter));
-  
   const labels = [], data = [], data1rm = [];
   logs.forEach(l => {
     const ex = l.exercises.find(e => e.name === selectedExerciseFilter);
     if (!ex) return;
-    const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-    const max1rm = Math.max(...ex.sets.map(s => {
-      const w = parseFloat(s.weight), r = parseInt(s.reps);
-      return (w && r) ? w * (1 + r/30) : 0;
-    }));
-    labels.push(new Date(l.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit'}));
+    const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight)||0));
+    const max1rm = Math.max(...ex.sets.map(s => { const w=parseFloat(s.weight),r=parseInt(s.reps); return (w&&r)?w*(1+r/30):0; }));
+    labels.push(new Date(l.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}));
     data.push(maxW);
-    data1rm.push(Math.round(max1rm * 10) / 10);
+    data1rm.push(Math.round(max1rm*10)/10);
   });
-  
-  document.getElementById('weightChartTitle').textContent = selectedExerciseFilter + ' — Poids max / 1RM estimé';
-  
+  document.getElementById('weightChartTitle').textContent = selectedExerciseFilter + ' — Poids / 1RM';
   const ctx = document.getElementById('weightChart').getContext('2d');
   if (wChartInst) wChartInst.destroy();
-  
   wChartInst = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
       datasets: [
-        {
-          label: 'Poids (kg)',
-          data,
-          borderColor: '#e8ff47',
-          backgroundColor: 'rgba(232,255,71,.08)',
-          pointBackgroundColor: '#e8ff47',
-          pointRadius: 5,
-          tension: 0.3,
-          fill: true,
-        },
-        {
-          label: '1RM estimé',
-          data: data1rm,
-          borderColor: '#ff6b35',
-          backgroundColor: 'transparent',
-          pointBackgroundColor: '#ff6b35',
-          pointRadius: 4,
-          tension: 0.3,
-          borderDash: [4, 4],
-        }
+        {label:'Poids (kg)',data,borderColor:'#e8ff47',backgroundColor:'rgba(232,255,71,.08)',pointBackgroundColor:'#e8ff47',pointRadius:5,tension:.3,fill:true},
+        {label:'1RM estimé',data:data1rm,borderColor:'#ff6b35',backgroundColor:'transparent',pointBackgroundColor:'#ff6b35',pointRadius:4,tension:.3,borderDash:[4,4]}
       ]
     },
     options: chartOptions('kg')
@@ -1014,15 +961,12 @@ function buildSessionFilter() {
   const container = document.getElementById('sessionFilter');
   container.innerHTML = '';
   if (sessionIds.length === 0) return;
-  
   if (!selectedSessionFilter || !sessionIds.includes(selectedSessionFilter)) selectedSessionFilter = sessionIds[0];
-  
   sessionIds.forEach(id => {
     const s = state.sessions.find(s => s.id === id);
-    const name = s ? s.name : id;
     const chip = document.createElement('button');
     chip.className = 'filter-chip' + (id === selectedSessionFilter ? ' active' : '');
-    chip.textContent = name;
+    chip.textContent = s ? s.name : id;
     chip.onclick = () => { selectedSessionFilter = id; buildSessionFilter(); buildVolumeChart(); };
     container.appendChild(chip);
   });
@@ -1031,24 +975,13 @@ function buildSessionFilter() {
 
 function buildVolumeChart() {
   const logs = state.logs.filter(l => l.sessionId === selectedSessionFilter);
-  const labels = logs.map(l => new Date(l.date).toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit'}));
-  const data = logs.map(l => Math.round(calcLogVolume(l)));
-  
   const ctx = document.getElementById('volumeChart').getContext('2d');
   if (vChartInst) vChartInst.destroy();
-  
   vChartInst = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels,
-      datasets: [{
-        label: 'Volume (kg)',
-        data,
-        backgroundColor: 'rgba(232,255,71,.3)',
-        borderColor: '#e8ff47',
-        borderWidth: 1,
-        borderRadius: 4,
-      }]
+      labels: logs.map(l => new Date(l.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})),
+      datasets: [{label:'Volume (kg)',data:logs.map(l=>Math.round(calcLogVolume(l))),backgroundColor:'rgba(232,255,71,.3)',borderColor:'#e8ff47',borderWidth:1,borderRadius:4}]
     },
     options: chartOptions('kg')
   });
@@ -1056,71 +989,35 @@ function buildVolumeChart() {
 
 function chartOptions(unit) {
   return {
-    responsive: true,
-    maintainAspectRatio: false,
+    responsive:true, maintainAspectRatio:false,
     plugins: {
-      legend: { labels: { color: '#8888a0', font: { family: 'DM Mono', size: 11 }, boxWidth: 20 } },
-      tooltip: {
-        backgroundColor: '#1a1a1e',
-        titleColor: '#e8ff47',
-        bodyColor: '#f0f0f2',
-        borderColor: '#2a2a32',
-        borderWidth: 1,
-        callbacks: { label: ctx => ` ${ctx.parsed.y} ${unit}` }
-      }
+      legend:{labels:{color:'#8888a0',font:{family:'DM Mono',size:11},boxWidth:20}},
+      tooltip:{backgroundColor:'#1a1a1e',titleColor:'#e8ff47',bodyColor:'#f0f0f2',borderColor:'#2a2a32',borderWidth:1,callbacks:{label:ctx=>` ${ctx.parsed.y} ${unit}`}}
     },
     scales: {
-      x: { ticks: { color: '#555566', font: { family: 'DM Mono', size: 10 } }, grid: { color: '#1a1a1e' } },
-      y: { ticks: { color: '#555566', font: { family: 'DM Mono', size: 10 }, callback: v => v + unit }, grid: { color: '#1a1a1e' } }
+      x:{ticks:{color:'#555566',font:{family:'DM Mono',size:10}},grid:{color:'#1a1a1e'}},
+      y:{ticks:{color:'#555566',font:{family:'DM Mono',size:10},callback:v=>v+unit},grid:{color:'#1a1a1e'}}
     }
   };
 }
 
 function buildWeekCompare() {
-  const getWeekVolume = (weeksAgo) => {
+  const getWeekVol = (weeksAgo) => {
     const now = new Date();
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - now.getDay() - weeksAgo * 7);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekStart.getDate() + 7);
-    
-    const volumes = {};
-    state.sessions.forEach(s => volumes[s.id] = 0);
-    
-    state.logs.forEach(l => {
-      const ld = new Date(l.date);
-      if (ld >= weekStart && ld < weekEnd) {
-        volumes[l.sessionId] = (volumes[l.sessionId] || 0) + calcLogVolume(l);
-      }
-    });
-    return volumes;
+    const start = new Date(now); start.setDate(now.getDate() - now.getDay() - weeksAgo*7);
+    const end = new Date(start); end.setDate(start.getDate()+7);
+    const vols = {}; state.sessions.forEach(s => vols[s.id] = 0);
+    state.logs.forEach(l => { const ld = new Date(l.date); if(ld>=start&&ld<end) vols[l.sessionId]=(vols[l.sessionId]||0)+calcLogVolume(l); });
+    return vols;
   };
-  
-  const thisWeek = getWeekVolume(0);
-  const lastWeek = getWeekVolume(1);
-  
-  const container = document.getElementById('weekCompare');
+  const curr = getWeekVol(0), prev = getWeekVol(1);
   const rows = state.sessions.map(s => {
-    const curr = thisWeek[s.id] || 0;
-    const prev = lastWeek[s.id] || 0;
-    const delta = curr - prev;
-    const pct = prev > 0 ? Math.round((delta / prev) * 100) : (curr > 0 ? 100 : 0);
-    const cls = delta > 0 ? 'pos' : delta < 0 ? 'neg' : 'neu';
-    const sign = delta > 0 ? '+' : '';
-    return `
-      <div class="wc-row">
-        <div class="session-col">${s.emoji} ${s.name}</div>
-        <div>${curr > 0 ? Math.round(curr) + ' kg' : '—'}</div>
-        <div class="wc-delta ${cls}">${prev > 0 || curr > 0 ? sign + pct + '%' : '—'}</div>
-      </div>`;
+    const c=curr[s.id]||0, p=prev[s.id]||0, d=c-p;
+    const pct=p>0?Math.round((d/p)*100):(c>0?100:0);
+    const cls=d>0?'pos':d<0?'neg':'neu', sign=d>0?'+':'';
+    return `<div class="wc-row"><div>${s.emoji} ${s.name}</div><div>${c>0?Math.round(c)+' kg':'—'}</div><div class="wc-delta ${cls}">${p>0||c>0?sign+pct+'%':'—'}</div></div>`;
   }).join('');
-  
-  container.innerHTML = `
-    <div class="wc-header">
-      <div>SÉANCE</div><div>CETTE SEM.</div><div>VS PRÉC.</div>
-    </div>
-    ${rows}
-  `;
+  document.getElementById('weekCompare').innerHTML = `<div class="wc-header"><div>SÉANCE</div><div>CETTE SEM.</div><div>VS PRÉC.</div></div>${rows}`;
 }
 
 // ══════════════════════════════════════════════
@@ -1129,42 +1026,34 @@ function buildWeekCompare() {
 function renderHistory() {
   const container = document.getElementById('historyList');
   const sorted = [...state.logs].reverse();
-  
   if (sorted.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="big">0</div><p>Aucune séance enregistrée pour l'instant.</p></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="big">0</div><p>Aucune séance enregistrée.</p></div>';
     return;
   }
-  
   container.innerHTML = sorted.map(l => {
     const s = state.sessions.find(s => s.id === l.sessionId);
-    const name = s ? s.emoji + ' ' + s.name : l.sessionId;
-    const date = new Date(l.date).toLocaleDateString('fr-FR', {weekday:'short', day:'2-digit', month:'short', year:'numeric'});
-    const vol = Math.round(calcLogVolume(l));
-    const sets = (l.exercises || []).reduce((a, e) => a + e.sets.length, 0);
-    const exCount = (l.exercises || []).length;
-    
+    const name = s ? s.emoji+' '+s.name : l.sessionId;
     return `
       <div class="history-item">
         <div class="hi-top">
           <div class="hi-session">${name}</div>
           <span class="hi-delete" onclick="deleteLog('${l.id}',event)">🗑</span>
         </div>
-        <div class="hi-date">${date}</div>
-        <div class="hi-stats" style="margin-top:8px;">
-          <div class="hi-stat"><strong>${exCount}</strong> exos</div>
-          <div class="hi-stat"><strong>${sets}</strong> séries</div>
-          <div class="hi-stat"><strong>${vol}</strong> kg volume</div>
+        <div class="hi-date">${new Date(l.date).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})}</div>
+        <div class="hi-stats">
+          <div class="hi-stat"><strong>${(l.exercises||[]).length}</strong> exos</div>
+          <div class="hi-stat"><strong>${(l.exercises||[]).reduce((a,e)=>a+e.sets.length,0)}</strong> séries</div>
+          <div class="hi-stat"><strong>${Math.round(calcLogVolume(l))}</strong> kg vol.</div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
-function deleteLog(id, e) {
+async function deleteLog(id, e) {
   e.stopPropagation();
   if (!confirm('Supprimer cette séance ?')) return;
   state.logs = state.logs.filter(l => l.id !== id);
-  save();
+  scheduleSave();
   renderHistory();
   showToast('Séance supprimée');
 }
@@ -1172,40 +1061,32 @@ function deleteLog(id, e) {
 // ══════════════════════════════════════════════
 //  UTILS
 // ══════════════════════════════════════════════
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function confirmClearData() {
-  if (confirm('⚠️ Effacer TOUTES les données ? (séances + historique)\nCette action est irréversible.')) {
-    localStorage.removeItem(STORAGE_KEY);
-    state = load();
-    save();
-    switchView('home');
-    showToast('Données effacées');
-  }
-}
-
-// Close modals on overlay click
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) overlay.classList.remove('open');
-  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
+
+// Visibility change — save when app goes to background
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (currentLog) saveCurrentLog();
+    if (saveTimeout) { clearTimeout(saveTimeout); saveState(); }
+  }
 });
 
 // ══════════════════════════════════════════════
-//  INIT
+//  START
 // ══════════════════════════════════════════════
-renderHome();
+init();
 </script>
 </body>
 </html>
