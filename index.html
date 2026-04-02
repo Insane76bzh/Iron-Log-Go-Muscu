@@ -439,58 +439,80 @@ function delFood(i){const k=todayKey();state.nutrition[k].splice(i,1);save();ren
 function clearDay(){if(!confirm('Effacer tous les aliments du jour ?'))return;state.nutrition[todayKey()]=[];save();renderNutrition();renderHome();}
 
 // ── FOOD INTAKE — SMART SEARCH ──
-// Parse "cuisse de poulet 180g" → {query:"cuisse de poulet", qty:180}
 function parseQtyFromInput(raw){
-  const match=raw.match(/(\d+)\s*g?\s*$/i);
+  // Match number anywhere in string: "flocon d'avoine 60g", "180g poulet", "poulet 180"
+  const match=raw.match(/(\d+)\s*g?\b/i);
   if(match){
     const qty=parseInt(match[1]);
-    const query=raw.replace(match[0],'').trim();
-    return{query:query||raw, qty};
+    const query=raw.replace(match[0],'').trim().replace(/\s+/g,' ');
+    return{query:query.length>1?query:raw.trim(), qty};
   }
   return{query:raw.trim(), qty:null};
 }
 
-// Built-in macros for common foods (per 100g) — fallback when offline
+function norm(s){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[''`]/g,' ')
+    .replace(/[^a-z0-9 ]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+
+// Built-in macros (per 100g)
 const FOOD_DB={
+  'flocons avoine':{kcal:372,prot:13,gluc:58,lip:7},
+  'flocon avoine':{kcal:372,prot:13,gluc:58,lip:7},
+  'avoine':{kcal:372,prot:13,gluc:58,lip:7},
   'riz cuit':{kcal:130,prot:2.7,gluc:28,lip:0.3},
   'riz blanc cuit':{kcal:130,prot:2.7,gluc:28,lip:0.3},
   'riz basmati cuit':{kcal:121,prot:2.5,gluc:25,lip:0.3},
+  'riz':{kcal:130,prot:2.7,gluc:28,lip:0.3},
   'haricots verts':{kcal:31,prot:1.8,gluc:5.7,lip:0.1},
-  'haricots verts cuits':{kcal:31,prot:1.8,gluc:5.7,lip:0.1},
+  'cuisse poulet':{kcal:181,prot:17,gluc:0,lip:12},
   'cuisse de poulet':{kcal:181,prot:17,gluc:0,lip:12},
-  'cuisse de poulet cuite':{kcal:181,prot:17,gluc:0,lip:12},
+  'blanc poulet':{kcal:110,prot:23,gluc:0,lip:1.2},
   'blanc de poulet':{kcal:110,prot:23,gluc:0,lip:1.2},
   'poulet':{kcal:165,prot:31,gluc:0,lip:3.6},
-  'boeuf haché 5%':{kcal:121,prot:20,gluc:0,lip:4},
-  'oeuf entier':{kcal:155,prot:13,gluc:1.1,lip:11},
+  'boeuf hache':{kcal:121,prot:20,gluc:0,lip:4},
+  'oeuf':{kcal:155,prot:13,gluc:1.1,lip:11},
   'blanc oeuf':{kcal:52,prot:11,gluc:0.7,lip:0.2},
   'saumon':{kcal:208,prot:20,gluc:0,lip:13},
-  'thon en conserve':{kcal:116,prot:26,gluc:0,lip:1},
-  'fromage blanc 0%':{kcal:45,prot:8,gluc:4,lip:0.1},
+  'thon':{kcal:116,prot:26,gluc:0,lip:1},
+  'fromage blanc':{kcal:45,prot:8,gluc:4,lip:0.1},
   'skyr':{kcal:63,prot:11,gluc:4,lip:0.2},
-  'yaourt hipro':{kcal:74,prot:15,gluc:3.5,lip:0.2},
   'hipro':{kcal:74,prot:15,gluc:3.5,lip:0.2},
+  'yaourt hipro':{kcal:74,prot:15,gluc:3.5,lip:0.2},
+  'yaourt':{kcal:61,prot:5,gluc:4.7,lip:3.3},
   'whey':{kcal:380,prot:75,gluc:8,lip:5},
-  'flocons avoine':{kcal:372,prot:13,gluc:58,lip:7},
+  'proteines':{kcal:380,prot:75,gluc:8,lip:5},
   'patate douce':{kcal:86,prot:1.6,gluc:20,lip:0.1},
   'brocoli':{kcal:34,prot:2.8,gluc:6.6,lip:0.4},
   'epinards':{kcal:23,prot:2.9,gluc:3.6,lip:0.4},
   'avocat':{kcal:160,prot:2,gluc:9,lip:15},
   'amandes':{kcal:579,prot:21,gluc:22,lip:50},
   'pain complet':{kcal:247,prot:9,gluc:43,lip:3},
-  'pates cuites':{kcal:157,prot:6,gluc:31,lip:1},
-  'lentilles cuites':{kcal:116,prot:9,gluc:20,lip:0.4},
+  'pates':{kcal:157,prot:6,gluc:31,lip:1},
+  'lentilles':{kcal:116,prot:9,gluc:20,lip:0.4},
   'banane':{kcal:89,prot:1.1,gluc:23,lip:0.3},
   'pomme':{kcal:52,prot:0.3,gluc:14,lip:0.2},
 };
 
 function findInLocalDB(query){
-  const q=query.toLowerCase().trim();
-  // Exact match first
-  if(FOOD_DB[q])return{...FOOD_DB[q],name:query};
-  // Partial match
+  const q=norm(query);
+  // 1. Exact match
   for(const[key,val]of Object.entries(FOOD_DB)){
-    if(q.includes(key)||key.includes(q))return{...val,name:query};
+    if(norm(key)===q)return{...val,name:query};
+  }
+  // 2. Query contains key or key contains query
+  for(const[key,val]of Object.entries(FOOD_DB)){
+    const nk=norm(key);
+    if(q.includes(nk)||nk.includes(q))return{...val,name:query};
+  }
+  // 3. Word overlap — any significant word matches
+  const qw=q.split(' ').filter(w=>w.length>3);
+  for(const[key,val]of Object.entries(FOOD_DB)){
+    const kw=norm(key).split(' ').filter(w=>w.length>3);
+    if(qw.some(w=>kw.includes(w)))return{...val,name:query};
   }
   return null;
 }
