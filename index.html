@@ -346,7 +346,21 @@ function defaultState(){
 return{sessions:[{id:‘legday’,name:‘LEGDAY’,emoji:‘🦵’,exercises:[]},{id:‘pecs’,name:‘PECS’,emoji:‘🫀’,exercises:[]},{id:‘bras’,name:‘BRAS’,emoji:‘💪’,exercises:[]},{id:‘dos’,name:‘DOS’,emoji:‘🏋️’,exercises:[]},{id:‘epaules’,name:‘ÉPAULES’,emoji:‘🔝’,exercises:[]}],logs:[],nutrition:{},targets:{kcal:2300,prot:190,gluc:230,lip:65}};
 }
 function loadState(){
-try{const r=localStorage.getItem(LS);if(r){const s=JSON.parse(r);if(!s.nutrition)s.nutrition={};if(!s.targets)s.targets={kcal:2300,prot:190,gluc:230,lip:65};return s;}}catch(e){}
+try{
+// Clear any old incompatible versions
+[‘ironlog_v3’,‘ironlog_v4’,‘ironlog_current_log_v1’].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
+const r=localStorage.getItem(LS);
+if(r){
+const s=JSON.parse(r);
+if(s&&Array.isArray(s.sessions)&&Array.isArray(s.logs)){
+if(!s.nutrition)s.nutrition={};
+if(!s.targets)s.targets={kcal:2300,prot:190,gluc:230,lip:65};
+return s;
+}
+}
+}catch(e){
+try{localStorage.removeItem(LS);}catch(e2){}
+}
 return defaultState();
 }
 function save(){
@@ -757,13 +771,23 @@ let toastT;
 function showToast(msg){const t=document.getElementById(‘toast’);t.textContent=msg;t.classList.add(‘show’);clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove(‘show’),2500);}
 
 // INIT
+function hideLoader(){
+try{
+const ls=document.getElementById(‘loadingScreen’);
+ls.style.transition=‘opacity .3s’;
+ls.style.opacity=‘0’;
+setTimeout(()=>{ls.style.display=‘none’;},300);
+}catch(e){}
+}
+
 async function init(){
-await new Promise(r=>setTimeout(r,500));
+try{
 // Recover crashed session
 try{
 const saved=localStorage.getItem(LS_LOG);
 if(saved){
-const {log,sessionId}=JSON.parse(saved);
+const parsed=JSON.parse(saved);
+const log=parsed.log,sessionId=parsed.sessionId;
 if(log&&sessionId){
 const session=state.sessions.find(s=>s.id===sessionId);
 if(session){
@@ -773,22 +797,24 @@ document.getElementById(‘sessionTitle’).textContent=session.emoji+’ ‘+se
 document.getElementById(‘sessionMeta’).textContent=new Date(log.date).toLocaleDateString(‘fr-FR’,{weekday:‘long’,day:‘numeric’,month:‘long’});
 document.getElementById(‘nav-session’).style.display=‘flex’;
 renderExercises();
-// Show recovery banner
-showToast(‘⚡ Séance en cours récupérée !’);
-// Switch to session view automatically
 document.querySelectorAll(’.view’).forEach(el=>el.classList.remove(‘active’));
 document.querySelectorAll(’.nav-btn’).forEach(el=>el.classList.remove(‘active’));
 document.getElementById(‘view-session’).classList.add(‘active’);
 document.getElementById(‘nav-session’).classList.add(‘active’);
+setTimeout(()=>showToast(‘⚡ Séance récupérée !’),500);
 }
 }
+}
+}catch(recoveryErr){
+localStorage.removeItem(LS_LOG);
+}
+if(!currentLog){
+try{renderHome();}catch(e){}
 }
 }catch(e){}
-
-document.getElementById(‘loadingScreen’).style.opacity=‘0’;
-document.getElementById(‘loadingScreen’).style.transition=‘opacity .3s’;
-setTimeout(()=>document.getElementById(‘loadingScreen’).style.display=‘none’,300);
-if(!currentLog) renderHome();
+finally{
+hideLoader();
+}
 }
 init();
 </script>
