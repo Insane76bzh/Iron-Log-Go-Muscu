@@ -13,7 +13,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .screen.active { display: block; }
 .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 14px; border-bottom: 0.5px solid rgba(0,0,0,0.12); margin-bottom: 18px; }
 .top-bar h2 { font-size: 20px; font-weight: 600; }
-.back-btn { background: none; border: none; cursor: pointer; color: #888780; font-size: 15px; padding: 0; display: flex; align-items: center; gap: 4px; }
+.back-btn { background: none; border: none; cursor: pointer; color: #888780; font-size: 15px; padding: 0; }
 .btn-outline { display: block; width: 100%; padding: 14px; font-size: 15px; font-weight: 500; background: #fff; color: #444; border: 0.5px solid rgba(0,0,0,0.15); border-radius: 14px; cursor: pointer; margin-bottom: 10px; }
 .btn-outline:active { background: #ececea; }
 .btn-primary { display: block; width: 100%; padding: 18px; font-size: 18px; font-weight: 600; background: #1a1a18; color: #fff; border: none; border-radius: 16px; cursor: pointer; margin: 12px 0 8px; }
@@ -31,18 +31,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .split-chevron { color: #ccc; font-size: 18px; }
 .split-last { font-size: 11px; color: #1D9E75; padding: 0 18px 12px; }
 
+.hint-text { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 12px; }
 .exo-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-.exo-row { background: #fff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
-.exo-row:active { background: #f0f0ee; }
-.exo-row-left { flex: 1; }
+.exo-row { background: #fff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+.exo-row-left { flex: 1; cursor: pointer; }
 .exo-row-name { font-size: 16px; font-weight: 600; color: #1a1a18; }
 .exo-row-last { font-size: 12px; color: #1D9E75; margin-top: 3px; }
-.exo-row-actions { display: flex; gap: 6px; margin-left: 8px; }
-.exo-action-btn { background: none; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer; color: #888780; white-space: nowrap; }
+.exo-row-none { font-size: 12px; color: #aaa; margin-top: 3px; }
+.exo-row-actions { display: flex; gap: 6px; margin-left: 10px; }
+.exo-action-btn { background: none; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; color: #888780; }
 .exo-action-btn:active { background: #ececea; }
 .exo-action-btn.danger { color: #D85A30; border-color: rgba(216,90,48,0.25); }
-
-.hint-text { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 12px; }
 
 .big-display { text-align: center; padding: 14px 0 4px; }
 .serie-label { font-size: 15px; color: #888780; }
@@ -55,13 +54,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .prog-banner { background: #fff; border-radius: 14px; padding: 12px 16px; margin: 10px 0; border: 0.5px solid rgba(0,0,0,0.08); }
 .prog-banner-title { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
 .serie-prog-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 3px 0; gap: 6px; }
-.serie-prog-row .s-num { color: #aaa; min-width: 20px; }
-.serie-prog-row .s-val { color: #1a1a18; font-weight: 600; flex: 1; }
-.serie-prog-row .s-arrow { font-size: 16px; min-width: 20px; text-align: center; }
-.serie-prog-row .s-prev { font-size: 12px; color: #aaa; min-width: 70px; text-align: right; }
+.s-num { color: #aaa; min-width: 20px; }
+.s-val { color: #1a1a18; font-weight: 600; flex: 1; }
+.s-arrow { font-size: 16px; min-width: 20px; text-align: center; }
+.s-prev { font-size: 12px; color: #aaa; min-width: 70px; text-align: right; }
 .arrow-up { color: #1D9E75; }
 .arrow-down { color: #D85A30; }
 .arrow-eq { color: #aaa; }
+
 .volume-compare { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid rgba(0,0,0,0.07); }
 .vol-block { flex: 1; text-align: center; }
 .vol-label { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -107,10 +107,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   body, #app { background: #1a1a18; color: #f0ede8; }
   .split-card, .exo-row, .input-block, .prog-banner, .hist-exo-block, .btn-outline { background: #2c2c2a; border-color: rgba(255,255,255,0.08); }
   .split-card:active { background: #333330; }
-  .exo-row:active { background: #3a3a38; }
-  .split-name, .exo-row-name, .big-input, .vol-num, .serie-prog-row .s-val, .hist-exo-name, .timer-num { color: #f0ede8; }
+  .split-name, .exo-row-name, .big-input, .vol-num, .s-val, .hist-exo-name, .timer-num { color: #f0ede8; }
   .step-btn { background: #3a3a38; border-color: rgba(255,255,255,0.1); color: #f0ede8; }
   .step-btn:active, .btn-outline:active { background: #4a4a48; }
+  .exo-action-btn { border-color: rgba(255,255,255,0.12); color: #888780; }
+  .exo-action-btn:active { background: #3a3a38; }
   .set-dot.pending { background: #3a3a38; color: #666; }
   .set-dot.current { background: #f0ede8; color: #1a1a18; }
   .timer-ring .bg { stroke: #3a3a38; }
@@ -120,10 +121,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   .top-bar { border-color: rgba(255,255,255,0.1); }
   .vol-sep { background: rgba(255,255,255,0.08); }
   .badge-eq { background: #3a3a38; }
-  .volume-compare { border-color: rgba(255,255,255,0.08); }
   .btn-outline { color: #f0ede8; }
-  .exo-action-btn { border-color: rgba(255,255,255,0.12); color: #888780; }
-  .exo-action-btn:active { background: #3a3a38; }
 }
 </style>
 </head>
@@ -133,16 +131,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="screen active" id="screen-home">
   <div class="top-bar">
     <h2>Iron Log</h2>
-    <button class="btn-outline" style="width:auto;padding:8px 16px;margin:0;font-size:13px;" onclick="showHistory()">Progression</button>
+    <button class="btn-outline" id="btn-history" style="width:auto;padding:8px 16px;margin:0;font-size:13px;">Progression</button>
   </div>
   <div class="split-grid" id="split-grid"></div>
 </div>
 
 <div class="screen" id="screen-split">
   <div class="top-bar">
-    <button class="back-btn" onclick="goHome()">← Retour</button>
+    <button class="back-btn" id="btn-back-split">← Retour</button>
     <h2 id="split-screen-title"></h2>
-    <button class="btn-outline" style="width:auto;padding:8px 14px;margin:0;font-size:13px;" onclick="addExoToSplit()">+ Ajouter</button>
+    <button class="btn-outline" id="btn-add-exo" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">+ Ajouter</button>
   </div>
   <div class="hint-text">Appuie sur ✏️ pour renommer · 🗑 pour supprimer</div>
   <div class="exo-list" id="exo-list"></div>
@@ -150,21 +148,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <div class="screen" id="screen-timer-choice">
   <div class="top-bar">
-    <button class="back-btn" onclick="showSplit(currentSplitId)">← Retour</button>
+    <button class="back-btn" id="btn-back-timer">← Retour</button>
     <span style="font-size:14px;color:#888780;" id="tc-exo-name"></span>
   </div>
   <div style="font-size:18px;font-weight:600;margin-bottom:6px;">Temps de récup</div>
   <div style="font-size:14px;color:#888780;margin-bottom:4px;">Entre chaque série</div>
   <div class="timer-choice">
-    <div class="timer-opt selected" onclick="selectTimer(90,this)">1 min 30<div class="opt-sub">Hypertrophie</div></div>
-    <div class="timer-opt" onclick="selectTimer(180,this)">3 min<div class="opt-sub">Force / lourd</div></div>
+    <div class="timer-opt selected" data-secs="90">1 min 30<div class="opt-sub">Hypertrophie</div></div>
+    <div class="timer-opt" data-secs="180">3 min<div class="opt-sub">Force / lourd</div></div>
   </div>
-  <button class="btn-primary" onclick="startSession()">C'est parti</button>
+  <button class="btn-primary" id="btn-start-session">C'est parti</button>
 </div>
 
 <div class="screen" id="screen-entry">
   <div class="top-bar">
-    <button class="back-btn" onclick="showSplit(currentSplitId)">← Fin</button>
+    <button class="back-btn" id="btn-back-entry">← Fin</button>
     <span style="font-size:13px;color:#888780;" id="entry-exo-name"></span>
   </div>
   <div class="big-display">
@@ -181,20 +179,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <label>Répétitions</label>
       <input class="big-input" type="number" id="inp-reps" value="10" min="1" max="99">
       <div class="stepper">
-        <button class="step-btn" onclick="step('reps',-1)">−</button>
-        <button class="step-btn" onclick="step('reps',1)">+</button>
+        <button class="step-btn" data-field="reps" data-delta="-1">−</button>
+        <button class="step-btn" data-field="reps" data-delta="1">+</button>
       </div>
     </div>
     <div class="input-block">
       <label>Poids kg</label>
       <input class="big-input" type="number" id="inp-weight" value="20" min="0" max="999" step="2.5">
       <div class="stepper">
-        <button class="step-btn" onclick="step('weight',-2.5)">−</button>
-        <button class="step-btn" onclick="step('weight',2.5)">+</button>
+        <button class="step-btn" data-field="weight" data-delta="-2.5">−</button>
+        <button class="step-btn" data-field="weight" data-delta="2.5">+</button>
       </div>
     </div>
   </div>
-  <button class="btn-primary" id="log-btn" onclick="logSet()">Valider la série</button>
+  <button class="btn-primary" id="log-btn">Valider la série</button>
   <div id="timer-section" style="display:none;">
     <div class="timer-wrap">
       <div class="timer-ring">
@@ -211,7 +209,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <div class="screen" id="screen-history">
   <div class="top-bar">
-    <button class="back-btn" onclick="goHome()">← Retour</button>
+    <button class="back-btn" id="btn-back-history">← Retour</button>
     <h2>Progression</h2>
   </div>
   <div id="full-history-content"></div>
@@ -220,14 +218,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </div>
 <script>
 const SPLITS = [
-  { id: 'jambes',  name: 'Jambes',     icon: '🦵', color: '#FAEEDA', iconColor: '#854F0B' },
-  { id: 'dos',     name: 'Dos',        icon: '🔙', color: '#E1F5EE', iconColor: '#0F6E56' },
-  { id: 'pec',     name: 'Pectoraux',  icon: '💪', color: '#E6F1FB', iconColor: '#185FA5' },
-  { id: 'epaules', name: 'Épaules',    icon: '🔝', color: '#FBEAF0', iconColor: '#993556' },
-  { id: 'bi_tri',  name: 'Bi-Triceps', icon: '⚡', color: '#EEEDFE', iconColor: '#534AB7' },
+  { id:'jambes',  name:'Jambes',     icon:'🦵', color:'#FAEEDA', iconColor:'#854F0B' },
+  { id:'dos',     name:'Dos',        icon:'🔙', color:'#E1F5EE', iconColor:'#0F6E56' },
+  { id:'pec',     name:'Pectoraux',  icon:'💪', color:'#E6F1FB', iconColor:'#185FA5' },
+  { id:'epaules', name:'Épaules',    icon:'🔝', color:'#FBEAF0', iconColor:'#993556' },
+  { id:'bi_tri',  name:'Bi-Triceps', icon:'⚡', color:'#EEEDFE', iconColor:'#534AB7' },
 ];
 
-// All exercises stored in one place — overridable names via renames store
 const BASE_EXERCISES = {
   jambes:  [{id:'squat',name:'Squat'},{id:'leg_press',name:'Leg press'},{id:'leg_curl',name:'Leg curl'},{id:'leg_ext',name:'Leg extension'},{id:'calf',name:'Mollets debout'}],
   dos:     [{id:'deadlift',name:'Soulevé de terre'},{id:'row_bench',name:'Rowing banc prone'},{id:'pulldown',name:'Tirage vertical'},{id:'row_cable',name:'Rowing câble'},{id:'hyperext',name:'Hyperextension'}],
@@ -238,16 +235,16 @@ const BASE_EXERCISES = {
 
 let db         = JSON.parse(localStorage.getItem('ironlog_db')      || '{}');
 let customExos = JSON.parse(localStorage.getItem('ironlog_custom')  || '{}');
-let renames    = JSON.parse(localStorage.getItem('ironlog_renames') || '{}'); // {id: newName}
-let deleted    = JSON.parse(localStorage.getItem('ironlog_deleted') || '[]'); // [id, ...]
+let renames    = JSON.parse(localStorage.getItem('ironlog_renames') || '{}');
+let deleted    = JSON.parse(localStorage.getItem('ironlog_deleted') || '[]');
 
-let currentExo    = null;
+let currentExo     = null;
 let currentSplitId = null;
 let timerDuration  = 90;
 let timerInterval  = null;
 let timerRemaining = 0;
 let sessionSets    = [];
-let lastSessionSets = [];
+let lastSessionSets= [];
 let chartInstances = {};
 
 function saveDB()      { localStorage.setItem('ironlog_db',      JSON.stringify(db)); }
@@ -258,12 +255,8 @@ function saveDeleted() { localStorage.setItem('ironlog_deleted', JSON.stringify(
 function getExoName(e) { return renames[e.id] || e.name; }
 
 function getExosForSplit(splitId) {
-  const base = (BASE_EXERCISES[splitId] || [])
-    .filter(e => !deleted.includes(e.id))
-    .map(e => ({ ...e, name: getExoName(e), splitId, isCustom: false }));
-  const custom = (customExos[splitId] || [])
-    .filter(e => !deleted.includes(e.id))
-    .map(e => ({ ...e, name: getExoName(e), splitId, isCustom: true }));
+  const base   = (BASE_EXERCISES[splitId] || []).filter(e => !deleted.includes(e.id)).map(e => ({...e, name: getExoName(e), splitId, isCustom: false}));
+  const custom = (customExos[splitId]     || []).filter(e => !deleted.includes(e.id)).map(e => ({...e, name: getExoName(e), splitId, isCustom: true}));
   return [...base, ...custom];
 }
 
@@ -271,8 +264,7 @@ function groupBySession(sets) {
   const sessions = [];
   sets.forEach(s => {
     const day = new Date(s.ts).toDateString();
-    if (!sessions.length || sessions[sessions.length-1].day !== day)
-      sessions.push({ day, sets: [s] });
+    if (!sessions.length || sessions[sessions.length-1].day !== day) sessions.push({day, sets:[s]});
     else sessions[sessions.length-1].sets.push(s);
   });
   return sessions;
@@ -286,6 +278,11 @@ function getLastSessionSets(exoId) {
   return groupBySession(sets).slice(-1)[0].sets;
 }
 
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
 function goHome() {
   clearInterval(timerInterval);
   sessionSets = []; lastSessionSets = [];
@@ -295,17 +292,13 @@ function goHome() {
   renderHome();
 }
 
-function show(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
+// ── HOME ─────────────────────────────────────────────────────
 function renderHome() {
   document.getElementById('split-grid').innerHTML = SPLITS.map(sp => {
-    const exos = getExosForSplit(sp.id);
-    const lastTs = exos.filter(e => db[e.id]?.length).map(e => db[e.id].slice(-1)[0].ts);
-    const lastDate = lastTs.length ? new Date(Math.max(...lastTs)).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) : null;
-    return `<div class="split-card" onclick="showSplit('${sp.id}')">
+    const exos    = getExosForSplit(sp.id);
+    const lastTs  = exos.filter(e => db[e.id]?.length).map(e => db[e.id].slice(-1)[0].ts);
+    const lastDate= lastTs.length ? new Date(Math.max(...lastTs)).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) : null;
+    return `<div class="split-card" data-split="${sp.id}">
       <div class="split-card-header">
         <div class="split-card-left">
           <div class="split-icon" style="background:${sp.color};color:${sp.iconColor};">${sp.icon}</div>
@@ -316,39 +309,64 @@ function renderHome() {
       ${lastDate ? `<div class="split-last">Dernière séance : ${lastDate}</div>` : ''}
     </div>`;
   }).join('');
+
+  document.getElementById('split-grid').addEventListener('click', e => {
+    const card = e.target.closest('.split-card');
+    if (card) showSplit(card.dataset.split);
+  });
 }
 
+// ── SPLIT ────────────────────────────────────────────────────
 function showSplit(splitId) {
   currentSplitId = splitId;
-  const sp = SPLITS.find(s => s.id === splitId);
-  document.getElementById('split-screen-title').textContent = sp.name;
+  document.getElementById('split-screen-title').textContent = SPLITS.find(s => s.id === splitId).name;
   renderExoList();
   show('screen-split');
 }
 
 function renderExoList() {
   const exos = getExosForSplit(currentSplitId);
-  document.getElementById('exo-list').innerHTML = exos.map(e => {
-    const sets = db[e.id] || [];
-    const last = sets.length ? sets[sets.length-1] : null;
-    return `<div class="exo-row">
-      <div class="exo-row-left" onclick="selectExo('${e.id}','${currentSplitId}')">
+  const list = document.getElementById('exo-list');
+  list.innerHTML = exos.map((e, idx) => {
+    const last = (db[e.id] || []).slice(-1)[0];
+    return `<div class="exo-row" data-idx="${idx}">
+      <div class="exo-row-left">
         <div class="exo-row-name">${e.name}</div>
         ${last
           ? `<div class="exo-row-last">${last.weight}kg × ${last.reps} — dernière fois</div>`
-          : '<div style="font-size:12px;color:#aaa;margin-top:3px;">Pas encore de données</div>'}
+          : `<div class="exo-row-none">Pas encore de données</div>`}
       </div>
       <div class="exo-row-actions">
-        <button class="exo-action-btn" onclick="renameExo('${e.id}')">✏️</button>
-        <button class="exo-action-btn danger" onclick="deleteExo('${e.id}','${currentSplitId}')">🗑</button>
+        <button class="exo-action-btn" data-action="rename" data-idx="${idx}">✏️</button>
+        <button class="exo-action-btn danger" data-action="delete" data-idx="${idx}">🗑</button>
       </div>
     </div>`;
   }).join('');
+
+  // Single delegated listener
+  list.onclick = e => {
+    const btn = e.target.closest('[data-action]');
+    if (btn) {
+      e.stopPropagation();
+      const idx  = parseInt(btn.dataset.idx);
+      const exos = getExosForSplit(currentSplitId);
+      const exo  = exos[idx];
+      if (btn.dataset.action === 'rename') renameExo(exo.id);
+      if (btn.dataset.action === 'delete') deleteExo(exo.id);
+      return;
+    }
+    const row = e.target.closest('.exo-row');
+    if (row) {
+      const idx  = parseInt(row.dataset.idx);
+      const exos = getExosForSplit(currentSplitId);
+      selectExo(exos[idx]);
+    }
+  };
 }
 
 function renameExo(exoId) {
-  const all = getExosForSplit(currentSplitId);
-  const exo = all.find(e => e.id === exoId);
+  const exos    = getExosForSplit(currentSplitId);
+  const exo     = exos.find(e => e.id === exoId);
   const newName = prompt('Nouveau nom :', exo ? exo.name : '');
   if (!newName || !newName.trim()) return;
   renames[exoId] = newName.trim();
@@ -357,12 +375,11 @@ function renameExo(exoId) {
   renderHome();
 }
 
-function deleteExo(exoId, splitId) {
-  if (!confirm('Supprimer cet exercice ? Les données restent sauvegardées.')) return;
+function deleteExo(exoId) {
+  if (!confirm('Supprimer cet exercice ?')) return;
   if (!deleted.includes(exoId)) deleted.push(exoId);
-  // Also remove from custom if custom
-  if (customExos[splitId]) {
-    customExos[splitId] = customExos[splitId].filter(e => e.id !== exoId);
+  if (customExos[currentSplitId]) {
+    customExos[currentSplitId] = customExos[currentSplitId].filter(e => e.id !== exoId);
     saveCustom();
   }
   saveDeleted();
@@ -371,9 +388,9 @@ function deleteExo(exoId, splitId) {
 }
 
 function addExoToSplit() {
-  const name = prompt('Nom de l\'exercice ?');
+  const name = prompt('Nom du nouvel exercice :');
   if (!name || !name.trim()) return;
-  const id = 'custom_' + currentSplitId + '_' + Date.now();
+  const id = 'c_' + Date.now();
   if (!customExos[currentSplitId]) customExos[currentSplitId] = [];
   customExos[currentSplitId].push({ id, name: name.trim() });
   saveCustom();
@@ -381,23 +398,20 @@ function addExoToSplit() {
   renderHome();
 }
 
-function selectExo(exoId, splitId) {
-  const allExos = getExosForSplit(splitId);
-  currentExo = allExos.find(e => e.id === exoId);
-  document.getElementById('tc-exo-name').textContent = currentExo.name;
+// ── TIMER CHOICE ─────────────────────────────────────────────
+function selectExo(exo) {
+  currentExo = exo;
+  document.getElementById('tc-exo-name').textContent = exo.name;
   show('screen-timer-choice');
 }
 
-function selectTimer(secs, el) {
-  timerDuration = secs;
-  document.querySelectorAll('.timer-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
+// ── SESSION ───────────────────────────────────────────────────
 function startSession() {
-  sessionSets = [];
+  sessionSets     = [];
   lastSessionSets = getLastSessionSets(currentExo.id);
   document.getElementById('entry-exo-name').textContent = currentExo.name;
+  document.getElementById('timer-section').style.display = 'none';
+  document.getElementById('log-btn').disabled = false;
   show('screen-entry');
   updateEntryScreen();
   prefillLastSet();
@@ -428,18 +442,18 @@ function renderSetDots() {
 
 function renderProgBanner() {
   const banner = document.getElementById('prog-banner');
-  if (!lastSessionSets.length && !sessionSets.length) { banner.style.display = 'none'; return; }
+  if (!lastSessionSets.length && !sessionSets.length) { banner.style.display='none'; return; }
   banner.style.display = 'block';
   const maxRows = Math.max(sessionSets.length, lastSessionSets.length);
   let html = '';
-  for(let i = 0; i < maxRows; i++) {
-    const curr = sessionSets[i], prev = lastSessionSets[i];
+  for (let i=0; i<maxRows; i++) {
+    const curr=sessionSets[i], prev=lastSessionSets[i];
     const currStr = curr ? `${curr.weight}kg × ${curr.reps}` : '—';
     const prevStr = prev ? `${prev.weight}kg × ${prev.reps}` : '—';
     let arrow = '<span class="s-arrow" style="color:#aaa;">—</span>';
     if (curr && prev) {
-      const d = (curr.weight * curr.reps) - (prev.weight * prev.reps);
-      arrow = d > 0 ? '<span class="s-arrow arrow-up">↑</span>' : d < 0 ? '<span class="s-arrow arrow-down">↓</span>' : '<span class="s-arrow arrow-eq">=</span>';
+      const d = (curr.weight*curr.reps) - (prev.weight*prev.reps);
+      arrow = d>0 ? '<span class="s-arrow arrow-up">↑</span>' : d<0 ? '<span class="s-arrow arrow-down">↓</span>' : '<span class="s-arrow arrow-eq">=</span>';
     }
     html += `<div class="serie-prog-row"><span class="s-num">S${i+1}</span><span class="s-val">${currStr}</span>${arrow}<span class="s-prev">${prevStr}</span></div>`;
   }
@@ -448,32 +462,25 @@ function renderProgBanner() {
   const volCmp  = document.getElementById('vol-compare');
   const currVol = Math.round(calcVolume(sessionSets));
   const prevVol = Math.round(calcVolume(lastSessionSets));
-  if (!prevVol && !currVol) { volCmp.style.display = 'none'; return; }
+  if (!prevVol && !currVol) { volCmp.style.display='none'; return; }
   volCmp.style.display = 'flex';
-  const diff    = currVol - prevVol;
-  const arrowV  = diff > 0 ? '<span class="vol-arrow arrow-up">↑</span>' : diff < 0 ? '<span class="vol-arrow arrow-down">↓</span>' : '<span class="vol-arrow arrow-eq">=</span>';
-  const diffClr = diff > 0 ? '#1D9E75' : diff < 0 ? '#D85A30' : '#aaa';
-  const diffStr = diff > 0 ? `+${diff}kg` : diff < 0 ? `${diff}kg` : 'stable';
+  const diff   = currVol - prevVol;
+  const arrowV = diff>0 ? '<span class="vol-arrow arrow-up">↑</span>' : diff<0 ? '<span class="vol-arrow arrow-down">↓</span>' : '<span class="vol-arrow arrow-eq">=</span>';
+  const clr    = diff>0 ? '#1D9E75' : diff<0 ? '#D85A30' : '#aaa';
+  const dStr   = diff>0 ? `+${diff}kg` : diff<0 ? `${diff}kg` : 'stable';
   volCmp.innerHTML = `
     <div class="vol-block"><div class="vol-label">Session</div><div class="vol-num">${currVol}<span style="font-size:11px;font-weight:400;color:#aaa;">kg</span></div></div>
     <div class="vol-sep"></div>${arrowV}<div class="vol-sep"></div>
     <div class="vol-block"><div class="vol-label">Dernière</div><div class="vol-num">${prevVol}<span style="font-size:11px;font-weight:400;color:#aaa;">kg</span></div></div>
     <div class="vol-sep"></div>
-    <div class="vol-block"><div class="vol-label">Diff.</div><div style="font-size:16px;font-weight:600;color:${diffClr};margin-top:2px;">${diffStr}</div></div>`;
-}
-
-function step(field, delta) {
-  const inp = document.getElementById('inp-' + field);
-  let val = parseFloat(inp.value) + delta;
-  if(val < 0) val = 0;
-  inp.value = field === 'weight' ? Math.round(val * 4) / 4 : Math.round(val);
+    <div class="vol-block"><div class="vol-label">Diff.</div><div style="font-size:16px;font-weight:600;color:${clr};margin-top:2px;">${dStr}</div></div>`;
 }
 
 function logSet() {
-  const reps   = parseInt(document.getElementById('inp-reps').value)   || 1;
+  const reps   = parseInt(document.getElementById('inp-reps').value)    || 1;
   const weight = parseFloat(document.getElementById('inp-weight').value) || 0;
   const entry  = { reps, weight, ts: Date.now() };
-  if(!db[currentExo.id]) db[currentExo.id] = [];
+  if (!db[currentExo.id]) db[currentExo.id] = [];
   db[currentExo.id].push(entry);
   saveDB();
   sessionSets.push(entry);
@@ -488,21 +495,21 @@ function startTimer() {
   const arcEl  = document.getElementById('timer-arc');
   const labelEl= document.getElementById('timer-label');
   const circ   = 276.46;
-  sec.style.display = 'block';
-  btn.disabled = true;
-  timerRemaining = timerDuration;
+  sec.style.display  = 'block';
+  btn.disabled       = true;
+  timerRemaining     = timerDuration;
   clearInterval(timerInterval);
   function tick() {
-    numEl.textContent = timerRemaining > 0 ? timerRemaining + 's' : 'Go !';
-    arcEl.style.strokeDashoffset = circ * (1 - timerRemaining / timerDuration);
-    if(timerRemaining <= 0) {
+    numEl.textContent = timerRemaining > 0 ? timerRemaining+'s' : 'Go !';
+    arcEl.style.strokeDashoffset = circ * (1 - timerRemaining/timerDuration);
+    if (timerRemaining <= 0) {
       clearInterval(timerInterval);
       btn.disabled = false;
       labelEl.textContent = 'Lance la série suivante !';
-      arcEl.style.stroke = '#1D9E75';
+      arcEl.style.stroke  = '#1D9E75';
     } else {
       labelEl.textContent = 'Récupération...';
-      arcEl.style.stroke = timerRemaining <= 10 ? '#D85A30' : '#1D9E75';
+      arcEl.style.stroke  = timerRemaining<=10 ? '#D85A30' : '#1D9E75';
     }
     timerRemaining--;
   }
@@ -510,14 +517,15 @@ function startTimer() {
   timerInterval = setInterval(tick, 1000);
 }
 
+// ── HISTORY ───────────────────────────────────────────────────
 function showHistory() {
   Object.values(chartInstances).forEach(c => c.destroy());
   chartInstances = {};
   const container = document.getElementById('full-history-content');
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark    = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
   const textColor = isDark ? '#888780' : '#aaa';
-  let html = '', hasData = false;
+  let html='', hasData=false;
 
   SPLITS.forEach(sp => {
     const exos = getExosForSplit(sp.id).filter(e => db[e.id]?.length);
@@ -526,22 +534,22 @@ function showHistory() {
     html += `<div class="hist-split-title">${sp.icon} ${sp.name}</div>`;
     exos.forEach(e => {
       const sessions = groupBySession(db[e.id]);
-      const maxes = sessions.map(s => ({
+      const maxes    = sessions.map(s => ({
         date: new Date(s.sets[0].ts).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}),
-        maxW: Math.max(...s.sets.map(x => x.weight)),
+        maxW: Math.max(...s.sets.map(x=>x.weight)),
         vol:  Math.round(calcVolume(s.sets)),
         sets: s.sets,
       }));
-      const globalMax = Math.max(...maxes.map(m => m.maxW));
-      let badge = '';
-      if(maxes.length >= 2) {
-        const diff = maxes[maxes.length-1].vol - maxes[maxes.length-2].vol;
-        badge = diff > 0 ? `<span class="s-badge badge-up">+${diff}kg</span>` : diff < 0 ? `<span class="s-badge badge-down">${diff}kg</span>` : `<span class="s-badge badge-eq">stable</span>`;
+      const globalMax = Math.max(...maxes.map(m=>m.maxW));
+      let badge='';
+      if (maxes.length>=2) {
+        const diff=maxes[maxes.length-1].vol - maxes[maxes.length-2].vol;
+        badge = diff>0 ? `<span class="s-badge badge-up">+${diff}kg</span>` : diff<0 ? `<span class="s-badge badge-down">${diff}kg</span>` : `<span class="s-badge badge-eq">stable</span>`;
       }
-      const recent = maxes.slice(-4).reverse().map((sess, idx) => {
-        const prev = maxes[maxes.length - 2 - idx];
-        const diff = prev ? sess.vol - prev.vol : null;
-        const diffHtml = diff !== null ? (diff > 0 ? `<span style="color:#1D9E75;font-weight:600;">+${diff}</span>` : diff < 0 ? `<span style="color:#D85A30;font-weight:600;">${diff}</span>` : '') : '';
+      const recent = maxes.slice(-4).reverse().map((sess,idx) => {
+        const prev     = maxes[maxes.length-2-idx];
+        const diff     = prev ? sess.vol-prev.vol : null;
+        const diffHtml = diff!==null ? (diff>0 ? `<span style="color:#1D9E75;font-weight:600;">+${diff}</span>` : diff<0 ? `<span style="color:#D85A30;font-weight:600;">${diff}</span>` : '') : '';
         return `<div class="hist-session">
           <span style="min-width:60px;">${sess.date}</span>
           <span style="flex:1;text-align:center;">${sess.sets.map(s=>`${s.weight}×${s.reps}`).join(' ')}</span>
@@ -562,27 +570,57 @@ function showHistory() {
   container.innerHTML = hasData ? html : '<div class="empty-state">Aucune donnée.<br>Lance ta première session !</div>';
   show('screen-history');
 
-  if(hasData) {
+  if (hasData) {
     SPLITS.forEach(sp => {
       getExosForSplit(sp.id).filter(e => db[e.id]?.length).forEach(e => {
         const sessions = groupBySession(db[e.id]);
-        if(sessions.length < 2) return;
-        const maxes = sessions.map(s => ({
+        if (sessions.length < 2) return;
+        const maxes  = sessions.map(s => ({
           date: new Date(s.sets[0].ts).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}),
-          maxW: Math.max(...s.sets.map(x => x.weight)),
+          maxW: Math.max(...s.sets.map(x=>x.weight)),
         }));
-        const canvas = document.getElementById('chart-' + e.id);
-        if(!canvas) return;
+        const canvas = document.getElementById('chart-'+e.id);
+        if (!canvas) return;
         chartInstances[e.id] = new Chart(canvas, {
-          type: 'line',
-          data: { labels: maxes.map(m => m.date), datasets: [{ data: maxes.map(m => m.maxW), borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,0.08)', borderWidth: 2, pointBackgroundColor: '#1D9E75', pointRadius: 4, tension: 0.35, fill: true }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' kg' } } }, scales: { x: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 } } }, y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 }, callback: v => v + 'kg' } } } }
+          type:'line',
+          data:{ labels: maxes.map(m=>m.date), datasets:[{ data: maxes.map(m=>m.maxW), borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.08)', borderWidth:2, pointBackgroundColor:'#1D9E75', pointRadius:4, tension:0.35, fill:true }] },
+          options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' kg'}} }, scales:{ x:{grid:{color:gridColor},ticks:{color:textColor,font:{size:10}}}, y:{grid:{color:gridColor},ticks:{color:textColor,font:{size:10},callback:v=>v+'kg'}} } }
         });
       });
     });
   }
 }
 
+// ── EVENT LISTENERS (no inline onclick) ───────────────────────
+document.getElementById('btn-history').addEventListener('click', showHistory);
+document.getElementById('btn-back-split').addEventListener('click', goHome);
+document.getElementById('btn-add-exo').addEventListener('click', addExoToSplit);
+document.getElementById('btn-back-timer').addEventListener('click', () => showSplit(currentSplitId));
+document.getElementById('btn-start-session').addEventListener('click', startSession);
+document.getElementById('btn-back-entry').addEventListener('click', () => showSplit(currentSplitId));
+document.getElementById('log-btn').addEventListener('click', logSet);
+document.getElementById('btn-back-history').addEventListener('click', goHome);
+
+document.querySelectorAll('.timer-opt').forEach(el => {
+  el.addEventListener('click', () => {
+    timerDuration = parseInt(el.dataset.secs);
+    document.querySelectorAll('.timer-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  });
+});
+
+document.querySelectorAll('.step-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const field = btn.dataset.field;
+    const delta = parseFloat(btn.dataset.delta);
+    const inp   = document.getElementById('inp-'+field);
+    let val     = parseFloat(inp.value) + delta;
+    if (val < 0) val = 0;
+    inp.value   = field==='weight' ? Math.round(val*4)/4 : Math.round(val);
+  });
+});
+
+// ── INIT ──────────────────────────────────────────────────────
 renderHome();
 </script>
 </body>
